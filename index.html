@@ -7,7 +7,7 @@
     <style>
         :root { 
             --primario: #0047ab; 
-            --whatsapp: #25d366; /* Verde oficial de WhatsApp */
+            --whatsapp: #25d366; 
             --oscuro: #333; 
             --claro: #f4f4f4; 
         }
@@ -25,7 +25,7 @@
         .nav-links { list-style: none; display: flex; gap: 25px; align-items: center; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: var(--oscuro); font-weight: 500; }
 
-        /* EL NUEVO BOTÓN EN EL MENÚ (Círculo Amarillo en tu imagen) */
+        /* Botón "Comenzar Alta" en el Menú */
         .btn-nav-alta {
             background: var(--primario);
             color: white !important;
@@ -36,43 +36,55 @@
         }
         .btn-nav-alta:hover { background: #003580; transform: translateY(-2px); }
 
-        /* Hero Público */
+        /* Hero Público con Botón de WhatsApp Central */
         .hero { 
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'); 
-            height: 70vh; background-size: cover; background-position: center;
+            height: 85vh; background-size: cover; background-position: center;
             color: white; display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 0 20px;
         }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; letter-spacing: 2px; }
+        .hero h1 { font-size: 4rem; margin-bottom: 10px; letter-spacing: 3px; font-weight: bold; }
+        .hero p { font-size: 1.5rem; margin-bottom: 30px; font-weight: 300; }
+
+        /* BOTÓN DE WHATSAPP CENTRAL (El cambio que pediste) */
+        .btn-whatsapp-central {
+            background: var(--whatsapp);
+            color: white;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .btn-whatsapp-central:hover {
+            background: #1eb954;
+            transform: scale(1.08);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        }
 
         /* Secciones Públicas */
-        .section { padding: 60px 10%; text-align: center; }
-        .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
-        .card { padding: 30px; border-radius: 10px; background: var(--claro); border-top: 5px solid var(--primario); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .section { padding: 80px 10%; text-align: center; }
+        .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
         /* AREA PRIVADA */
-        #seccion-registro { background-color: var(--primario); color: white; padding: 80px 10%; }
-        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; color: var(--oscuro); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .auth-container input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #seccion-registro { background-color: var(--primario); color: white; padding: 100px 10%; }
+        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 35px; border-radius: 15px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .auth-container input { width: 100%; padding: 12px; margin: 12px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 1rem; }
 
         /* Formulario Sheets */
-        #form-alta-container { display: none; max-width: 600px; margin: 0 auto; background: white; padding: 35px; border-radius: 12px; color: var(--oscuro); }
-        .form-alta { display: flex; flex-direction: column; gap: 15px; }
-        .form-alta input, .form-alta select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; }
+        #form-alta-container { display: none; max-width: 650px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; color: var(--oscuro); }
+        .form-alta { display: flex; flex-direction: column; gap: 18px; }
+        .form-alta input, .form-alta select { padding: 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
         
-        /* BOTÓN LOGOUT */
-        .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
 
-        /* BOTÓN WHATSAPP VERDE (Círculo Rojo en tu imagen) */
-        .btn-whatsapp-float {
-            position: fixed; bottom: 30px; right: 30px; 
-            background: var(--whatsapp); 
-            color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none;
-            font-weight: bold; box-shadow: 0 6px 15px rgba(0,0,0,0.2); z-index: 999;
-            display: flex; align-items: center; gap: 10px; transition: 0.3s;
-        }
-        .btn-whatsapp-float:hover { background: #1eb954; transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -89,7 +101,11 @@
 
     <section class="hero">
         <h1>TRAZAFINES</h1>
-        <p style="font-size: 1.4rem; font-weight: 300;">Soluciones logísticas eficientes para tu empresa.</p>
+        <p>Soluciones logísticas eficientes para tu empresa.</p>
+        
+        <a href="https://wa.me/8112209919?text=Hola!%20Solicito%20una%20cotización" class="btn-whatsapp-central" target="_blank">
+            <span>📲 Cotización Rápida</span>
+        </a>
     </section>
 
     <section id="valores" class="section">
@@ -112,15 +128,15 @@
 
     <section id="servicios" class="section" style="background: var(--claro);">
         <h2>Servicios Especializados</h2>
-        <p style="max-width: 800px; margin: 0 auto;">Gestión integral de fletes, auditoría de paquetería y soluciones a medida para el crecimiento de tu negocio logístico.</p>
+        <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">Gestión integral de fletes, auditoría de paquetería y soluciones a medida para el crecimiento de tu negocio logístico.</p>
     </section>
 
     <section id="seccion-registro">
         <h2 style="text-align: center; margin-bottom: 40px;">Registro de Empresas</h2>
         
         <div id="auth-view" class="auth-container">
-            <h3 style="text-align: center; color: var(--primario); margin-bottom: 5px;">Portal Privado</h3>
-            <p style="text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 20px;">Inicia sesión para acceder al formulario.</p>
+            <h3 style="text-align: center; color: var(--primario); margin-bottom: 10px;">Portal Privado</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: #666; margin-bottom: 25px;">Inicia sesión para acceder al formulario de alta.</p>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
@@ -128,7 +144,7 @@
         </div>
 
         <div id="form-alta-container">
-            <h3 style="text-align: center; margin-bottom: 25px;">Formulario de Alta</h3>
+            <h3 style="text-align: center; margin-bottom: 25px;">Formulario de Alta de Cliente</h3>
             <form class="form-alta" action="https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec" method="POST">
                 <input type="text" name="nombre" placeholder="Nombre completo del contacto" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
@@ -140,17 +156,14 @@
                     <option value="Flete">Flete</option>
                     <option value="Auditoria">Auditoría</option>
                 </select>
-                <button type="submit" class="btn-auth" style="background: var(--secundario);">Registrar Cliente</button>
+                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente en Base de Datos</button>
             </form>
         </div>
     </section>
 
-    <a href="https://wa.me/8112209919?text=Hola!%20Solicito%20una%20cotización" class="btn-whatsapp-float" target="_blank">
-        <span>📲 Cotización Rápida</span>
-    </a>
-
-    <footer style="text-align: center; padding: 40px; background: #222; color: white;">
-        <p>&copy; 2026 Trazafines Logística | Santa Catarina, N.L.</p>
+    <footer style="text-align: center; padding: 50px; background: #222; color: white;">
+        <p style="margin-bottom: 10px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
+        <p style="font-size: 0.9rem; color: #bbb;">&copy; 2026 | Santa Catarina, N.L. | Todos los derechos reservados.</p>
     </footer>
 
     <script type="module">
@@ -173,14 +186,14 @@
         window.handleLogin = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Acceso denegado: " + err.message));
+            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error al entrar: " + err.message));
         };
 
         window.handleRegister = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
             createUserWithEmailAndPassword(auth, email, pass)
-                .then(() => alert("Cuenta creada. Ahora puedes llenar el formulario."))
+                .then(() => alert("¡Cuenta creada! Ya puedes usar el formulario."))
                 .catch(err => alert("Error al registrar: " + err.message));
         };
 
