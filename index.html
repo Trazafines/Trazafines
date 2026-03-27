@@ -14,66 +14,67 @@
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: white; color: var(--oscuro); scroll-behavior: smooth; }
 
-        /* Navegación (Simplificada para celular) */
+        /* --- ESTILOS GENERALES (PARA COMPUTADORA) --- */
+        
+        /* Navegación */
         nav { 
             background: white; padding: 1rem 5%; display: flex; 
-            justify-content: flex-end; align-items: center; 
+            justify-content: space-between; align-items: center; 
             position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; 
         }
         
-        /* Quité el logo del nav para no amontonar en móvil */
+        /* LOGO EN EL MENÚ (Sup Izq) */
+        .logo-nav { height: 45px; width: auto; display: block; }
         
-        .nav-links { list-style: none; display: flex; gap: 15px; align-items: center; margin: 0; padding: 0; font-size: 0.9rem;}
+        .nav-links { list-style: none; display: flex; gap: 25px; align-items: center; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: var(--oscuro); font-weight: 500; }
 
         .btn-nav-alta {
             background: var(--primario);
             color: white !important;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border-radius: 5px;
             font-weight: bold !important;
             transition: 0.3s;
         }
+        .btn-nav-alta:hover { background: #003580; transform: translateY(-2px); }
 
-        /* Hero con LOGO TRANSPARENTE CENTRAL */
+        /* Hero con LOGO CENTRAL (Impacto) */
         .hero { 
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'); 
-            height: 80vh; background-size: cover; background-position: center;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'); 
+            height: 90vh; background-size: cover; background-position: center;
             color: white; display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 0 20px;
         }
         
-        /* LOGO CENTRAL TRANSPARENTE (Ajustado) */
-        .logo-hero { 
-            height: 120px; /* Tamaño ajustado para móvil */
-            width: auto; 
-            margin-bottom: 20px; 
-            /* Agregué una sombra suave para que resalte más sobre el fondo oscuro */
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); 
-        }
+        /* LOGO CENTRAL GRANDE (PC) */
+        .logo-hero { height: 180px; width: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
 
-        /* Eliminé el h1 que decía TRAZAFINES (Ya no hay redundancia) */
+        .hero p { font-size: 1.4rem; margin: 15px 0 35px; font-weight: 300; max-width: 600px; }
 
-        .hero p { font-size: 1.2rem; margin: 10px 0 30px; font-weight: 300; max-width: 500px; line-height: 1.4; }
-
+        /* Botón WhatsApp (PC) */
         .btn-whatsapp-central {
             background: var(--whatsapp);
             color: white;
             text-decoration: none;
-            padding: 15px 30px;
+            padding: 18px 35px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            gap: 12px;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
+        .btn-whatsapp-central:hover { background: #1eb954; transform: scale(1.08); }
 
-        /* Secciones, Firebase, Logout (se mantienen igual) */
-        .section { padding: 60px 10%; text-align: center; }
+        /* Secciones Públicas */
+        .section { padding: 80px 10%; text-align: center; }
         .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .card { padding: 30px; border-radius: 10px; background: var(--claro); border-top: 6px solid var(--primario); }
+        .card { padding: 30px; border-radius: 10px; background: var(--claro); border-top: 5px solid var(--primario); }
+
+        /* Área Privada y Logout */
         #seccion-registro { background-color: var(--primario); color: white; padding: 80px 10%; }
         .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; color: var(--oscuro); }
         .auth-container input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
@@ -82,11 +83,54 @@
         .form-alta { display: flex; flex-direction: column; gap: 15px; }
         .form-alta input, .form-alta select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; }
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; background: #222; color: white; }
+
+        /* --- MEDIA QUERIES (AJUSTES PARA CELULAR) --- */
+        @media (max-width: 768px) {
+            /* Menú en Celular */
+            nav { padding: 0.8rem 1rem; flex-wrap: wrap; }
+            .logo-nav { height: 35px; margin-bottom: 10px; }
+            .nav-links { gap: 10px; font-size: 0.9rem; width: 100%; justify-content: space-around; }
+            .btn-nav-alta { padding: 8px 15px; }
+
+            /* Hero en Celular */
+            .hero { height: 80vh; padding: 0 15px; }
+            
+            /* Logo central más pequeño en cel */
+            .logo-hero { height: 110px; margin-bottom: 15px; }
+            
+            .hero p { font-size: 1.1rem; margin-bottom: 25px; max-width: 90%; }
+
+            /* Botón WhatsApp en Celular (Más pequeño y adaptable) */
+            .btn-whatsapp-central {
+                padding: 14px 25px;
+                font-size: 1rem;
+                gap: 8px;
+                width: 80%; /* Ocupa más ancho del cel sin cortarse */
+                max-width: 280px;
+                justify-content: center;
+                border-radius: 30px;
+            }
+
+            /* Ajuste de Secciones en Celular */
+            .section { padding: 50px 5%; }
+            .grid-valores { gap: 20px; }
+            .card { padding: 20px; }
+            #seccion-registro { padding: 50px 5%; }
+            
+            .auth-container, #form-alta-container { padding: 20px; width: 90%; }
+            .btn-auth { padding: 12px; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
+        <a href="#">
+            <img src="trazafines.png" alt="Trazafines Logo" class="logo-nav">
+        </a>
         <ul class="nav-links">
             <li><a href="#valores">Valores</a></li>
             <li><a href="#servicios">Servicios</a></li>
@@ -97,7 +141,7 @@
 
     <section class="hero">
         <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
-        
+        <h1>TRAZAFINES</h1>
         <p>Soluciones logísticas eficientes para tu empresa.</p>
         
         <a href="https://wa.me/8112209919?text=Hola!%20Solicito%20una%20cotización" class="btn-whatsapp-central" target="_blank">
@@ -130,13 +174,14 @@
 
     <section id="seccion-registro">
         <h2 style="text-align: center; margin-bottom: 40px;">Registro de Empresas</h2>
+        
         <div id="auth-view" class="auth-container">
-            <h3 style="text-align: center; color: var(--primario);">Portal Privado</h3>
-            <p style="text-align: center; font-size: 0.95rem; color: #666;">Inicia sesión para acceder al formulario.</p>
+            <h3 style="text-align: center; color: var(--primario); margin-bottom: 10px;">Portal Privado</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: #666; margin-bottom: 25px;">Inicia sesión para acceder al formulario.</p>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
-            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta</button>
+            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta Nueva</button>
         </div>
 
         <div id="form-alta-container">
@@ -144,9 +189,9 @@
             <form class="form-alta" action="https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec" method="POST">
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
-                <input type="text" name="nombreEmpresa" placeholder="Nombre de la empresa">
+                <input type="text" name="nombreEmpresa" placeholder="Empresa">
                 <input type="tel" name="celular" placeholder="Celular / WhatsApp">
-                <input type="tel" name="telefonoFijo" placeholder="Teléfono Fijo">
+                <input type="tel" name="telefonoFijo" placeholder="Tel Fijo">
                 <select name="servicio">
                     <option value="Logistica">Logística</option>
                     <option value="Flete">Flete</option>
@@ -159,7 +204,7 @@
 
     <footer style="text-align: center; padding: 40px; background: #222; color: white;">
         <img src="trazafines.png" alt="Logo" style="height: 35px; margin-bottom: 10px; filter: brightness(0) invert(1);">
-        <p style="margin-bottom: 5px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
+        <p style="margin-bottom: 10px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
         <p style="font-size: 0.8rem; color: #bbb;">&copy; 2026 | Santa Catarina, N.L.</p>
     </footer>
 
@@ -190,8 +235,8 @@
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
             createUserWithEmailAndPassword(auth, email, pass)
-                .then(() => alert("¡Cuenta creada!"))
-                .catch(err => alert("Error: " + err.message));
+                .then(() => alert("¡Cuenta creada con éxito! Ya puedes usar el formulario."))
+                .catch(err => alert("Error al registrar: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
