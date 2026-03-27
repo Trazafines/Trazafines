@@ -21,6 +21,7 @@
             position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; 
         }
         
+        /* LOGO EN EL MENÚ */
         .logo-nav { height: 45px; width: auto; display: block; }
         
         .nav-links { list-style: none; display: flex; gap: 25px; align-items: center; margin: 0; padding: 0; }
@@ -34,8 +35,9 @@
             font-weight: bold !important;
             transition: 0.3s;
         }
+        .btn-nav-alta:hover { background: #003580; transform: translateY(-2px); }
 
-        /* Hero Principal */
+        /* Hero con LOGO CENTRAL (Sin texto redundante) */
         .hero { 
             background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'); 
             height: 90vh; background-size: cover; background-position: center;
@@ -43,9 +45,12 @@
             align-items: center; text-align: center; padding: 0 20px;
         }
         
-        .logo-hero { height: 180px; width: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
-        .hero h1 { font-size: 3.5rem; margin: 0; letter-spacing: 4px; font-weight: bold; }
-        .hero p { font-size: 1.4rem; margin: 15px 0 35px; font-weight: 300; max-width: 600px; }
+        /* LOGO CENTRAL (Ajustado) */
+        .logo-hero { height: 200px; /* Un poco más grande */ width: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+
+        /* Eliminé el estilo para .hero h1 porque ya no lo usaremos */
+
+        .hero p { font-size: 1.6rem; margin: 15px 0 45px; font-weight: 300; max-width: 650px; line-height: 1.4; }
 
         .btn-whatsapp-central {
             background: var(--whatsapp);
@@ -58,8 +63,10 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: 0.3s ease;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
+        .btn-whatsapp-central:hover { background: #1eb954; transform: scale(1.08); }
 
         /* Secciones */
         .section { padding: 80px 10%; text-align: center; }
@@ -68,7 +75,7 @@
 
         /* Área Privada */
         #seccion-registro { background-color: var(--primario); color: white; padding: 100px 10%; }
-        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 35px; border-radius: 15px; color: var(--oscuro); }
+        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 35px; border-radius: 15px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         .auth-container input { width: 100%; padding: 12px; margin: 12px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
         .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 
@@ -95,8 +102,9 @@
 
     <section class="hero">
         <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
-        <h1>TRAZAFINES</h1>
+        
         <p>Soluciones logísticas eficientes para tu empresa.</p>
+        
         <a href="https://wa.me/8112209919?text=Hola!%20Solicito%20una%20cotización" class="btn-whatsapp-central" target="_blank">
             <span>📲 Cotización Rápida</span>
         </a>
@@ -127,9 +135,10 @@
 
     <section id="seccion-registro">
         <h2 style="text-align: center; margin-bottom: 40px;">Registro de Empresas</h2>
+        
         <div id="auth-view" class="auth-container">
-            <h3 style="text-align: center; color: var(--primario);">Portal Privado</h3>
-            <p style="text-align: center; font-size: 0.95rem; color: #666;">Inicia sesión para acceder al formulario.</p>
+            <h3 style="text-align: center; color: var(--primario); margin-bottom: 10px;">Portal Privado</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: #666; margin-bottom: 25px;">Inicia sesión para acceder al formulario.</p>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
@@ -156,7 +165,8 @@
 
     <footer style="text-align: center; padding: 50px; background: #222; color: white;">
         <img src="trazafines.png" alt="Logo" style="height: 40px; margin-bottom: 15px; filter: brightness(0) invert(1);">
-        <p>&copy; 2026 | Santa Catarina, N.L. | Trazafines Logística</p>
+        <p style="margin-bottom: 10px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
+        <p style="font-size: 0.9rem; color: #bbb;">&copy; 2026 | Santa Catarina, N.L.</p>
     </footer>
 
     <script type="module">
@@ -179,15 +189,15 @@
         window.handleLogin = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error: " + err.message));
+            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error al entrar: " + err.message));
         };
 
         window.handleRegister = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
             createUserWithEmailAndPassword(auth, email, pass)
-                .then(() => alert("Cuenta creada."))
-                .catch(err => alert("Error: " + err.message));
+                .then(() => alert("¡Cuenta creada con éxito!"))
+                .catch(err => alert("Error al registrar: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
