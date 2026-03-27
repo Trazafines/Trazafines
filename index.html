@@ -12,17 +12,22 @@
             --claro: #f4f4f4; 
         }
 
-        /* --- ESTILOS RESPONSIVOS --- */
+        /* --- ESTILOS RESPONSIVOS FUNDAMENTALES --- */
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: white; color: var(--oscuro); scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* Navegación */
+        /* Navegación (Con Doble Identidad) */
         nav { 
             background: white; padding: 10px 5%; display: flex; 
             justify-content: space-between; align-items: center; 
             position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; 
         }
-        .logo-nav { height: 40px; width: auto; max-width: 150px; }
+        
+        /* Contenedor del Logo Superior Izquierdo */
+        .logo-nav-container { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        
+        /* EL ESCUDO (NUEVO) */
+        .isotipo-nav { height: 35px; width: auto; object-fit: contain; }
         
         .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: var(--oscuro); font-weight: 500; font-size: 0.9rem; }
@@ -40,7 +45,7 @@
             align-items: center; text-align: center; padding: 0 20px;
         }
         
-        /* LOGO CENTRAL RESPONSIVO */
+        /* LOGO HORIZONTAL CENTRAL (Impacto) */
         .logo-hero { 
             width: 85%; max-width: 380px; height: auto; 
             margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
@@ -79,14 +84,14 @@
         /* Ajustes para Celular (Media Queries) */
         @media (max-width: 600px) {
             nav { padding: 10px 3%; }
-            .logo-nav { height: 30px; }
-            .nav-links { gap: 8px; }
+            .logo-nav-container { flex-wrap: wrap; justify-content: center; }
+            .isotipo-nav { height: 30px; }
+            .logo-nav-text { font-size: 0.8rem; }
+            .nav-links { gap: 8px; justify-content: center; width: 100%; }
             .nav-links a { font-size: 0.8rem; }
             .logo-hero { width: 90%; max-width: 280px; }
             .hero p { font-size: 1.1rem; }
             .btn-whatsapp-central { width: 100%; max-width: 280px; justify-content: center; }
-            .section { padding: 60px 5%; }
-            #seccion-registro { padding: 60px 5%; }
         }
 
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; }
@@ -95,7 +100,9 @@
 <body>
 
     <nav>
-        <a href="#"><img src="trazafines.png" alt="Logo" class="logo-nav"></a>
+        <a href="#" class="logo-nav-container">
+            <img src="Isotipo_sinfondo.png" alt="Escudo Trazafines" class="isotipo-nav">
+        </a>
         <ul class="nav-links">
             <li><a href="#valores">Valores</a></li>
             <li><a href="#servicios">Servicios</a></li>
@@ -105,7 +112,7 @@
     </nav>
 
     <section class="hero">
-        <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
+        <img src="trazafines.png" alt="Branding Trazafines" class="logo-hero">
         <p>Soluciones logísticas eficientes para tu empresa.</p>
         <a href="https://wa.me/8112209919" class="btn-whatsapp-central" target="_blank">
             <span>📲 Cotización Rápida</span>
@@ -134,7 +141,7 @@
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
-            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta</button>
+            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta Nueva</button>
         </div>
 
         <div id="form-alta-container" style="display: none;">
@@ -150,20 +157,22 @@
                     <option value="Flete">Flete</option>
                     <option value="Auditoria">Auditoría</option>
                 </select>
-                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente</button>
+                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente en Sheets</button>
             </form>
         </div>
     </section>
 
     <footer style="text-align: center; padding: 40px; background: #222; color: white;">
-        <img src="trazafines.png" alt="Logo" style="height: 30px; filter: brightness(0) invert(1);">
-        <p>&copy; 2026 Trazafines Logística | Santa Catarina, N.L.</p>
+        <img src="Isotipo_sinfondo.png" alt="Escudo Blanco" style="height: 30px; margin-bottom: 10px; filter: brightness(0) invert(1);">
+        <p style="margin-bottom: 10px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
+        <p style="font-size: 0.8rem; color: #bbb;">&copy; 2026 | Santa Catarina, N.L.</p>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // Tus credenciales reales
         const firebaseConfig = {
             apiKey: "AIzaSyDhM6EzdUvaWOYczUg_4McUsHr3nyOOXM8",
             authDomain: "trazafines-login.firebaseapp.com",
@@ -180,13 +189,15 @@
         window.handleLogin = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error: " + err.message));
+            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error al entrar: " + err.message));
         };
 
         window.handleRegister = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            createUserWithEmailAndPassword(auth, email, pass).then(() => alert("Cuenta creada.")).catch(err => alert("Error: " + err.message));
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then(() => alert("¡Cuenta creada con éxito!"))
+                .catch(err => alert("Error: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -195,6 +206,7 @@
             const authView = document.getElementById('auth-view');
             const formView = document.getElementById('form-alta-container');
             const logoutBtn = document.getElementById('btn-logout');
+
             if (user) {
                 authView.style.display = 'none';
                 formView.style.display = 'block';
