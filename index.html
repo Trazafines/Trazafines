@@ -39,7 +39,7 @@
         }
         .btn-nav-alta:hover { background: #003580; transform: translateY(-2px); }
 
-        /* Hero con LOGO CENTRAL (Impacto) */
+        /* Hero con LOGO CENTRAL */
         .hero { 
             background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'); 
             height: 90vh; background-size: cover; background-position: center;
@@ -50,6 +50,7 @@
         /* LOGO CENTRAL GRANDE (PC) */
         .logo-hero { height: 180px; width: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
 
+        .hero h1 { font-size: 3.5rem; margin: 0; letter-spacing: 4px; font-weight: bold; }
         .hero p { font-size: 1.4rem; margin: 15px 0 35px; font-weight: 300; max-width: 600px; }
 
         /* Botón WhatsApp (PC) */
@@ -69,20 +70,22 @@
         }
         .btn-whatsapp-central:hover { background: #1eb954; transform: scale(1.08); }
 
-        /* Secciones Públicas */
+        /* Secciones */
         .section { padding: 80px 10%; text-align: center; }
         .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
         .card { padding: 30px; border-radius: 10px; background: var(--claro); border-top: 5px solid var(--primario); }
 
-        /* Área Privada y Logout */
+        /* Área Privada */
         #seccion-registro { background-color: var(--primario); color: white; padding: 80px 10%; }
-        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; color: var(--oscuro); }
+        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         .auth-container input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        #form-alta-container { display: none; max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; color: var(--oscuro); }
-        .form-alta { display: flex; flex-direction: column; gap: 15px; }
-        .form-alta input, .form-alta select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; }
-        .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
+
+        #form-alta-container { display: none; max-width: 650px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; color: var(--oscuro); }
+        .form-alta { display: flex; flex-direction: column; gap: 18px; }
+        .form-alta input, .form-alta select { padding: 14px; border: 1px solid #ccc; border-radius: 8px; }
+        
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
 
         /* Footer */
         footer { text-align: center; padding: 40px; background: #222; color: white; }
@@ -98,30 +101,29 @@
             /* Hero en Celular */
             .hero { height: 80vh; padding: 0 15px; }
             
-            /* Logo central más pequeño en cel */
+            /* SOLUCIÓN CLAVE: Logo central más pequeño en cel */
             .logo-hero { height: 110px; margin-bottom: 15px; }
             
+            .hero h1 { font-size: 2.5rem; letter-spacing: 2px; }
             .hero p { font-size: 1.1rem; margin-bottom: 25px; max-width: 90%; }
 
-            /* Botón WhatsApp en Celular (Más pequeño y adaptable) */
+            /* Botón WhatsApp en Celular (Adaptable) */
             .btn-whatsapp-central {
                 padding: 14px 25px;
                 font-size: 1rem;
                 gap: 8px;
-                width: 80%; /* Ocupa más ancho del cel sin cortarse */
+                width: 90%; /* Ocupa casi todo el ancho sin cortarse */
                 max-width: 280px;
                 justify-content: center;
-                border-radius: 30px;
             }
 
-            /* Ajuste de Secciones en Celular */
+            /* Secciones en Celular */
             .section { padding: 50px 5%; }
             .grid-valores { gap: 20px; }
             .card { padding: 20px; }
             #seccion-registro { padding: 50px 5%; }
             
             .auth-container, #form-alta-container { padding: 20px; width: 90%; }
-            .btn-auth { padding: 12px; }
         }
     </style>
 </head>
@@ -162,7 +164,7 @@
             </div>
             <div class="card">
                 <h3>Compromiso</h3>
-                <p>Tu carga es nuestra prioridad desde el origen hasta el destino.</p>
+                <p>Tu carga es nuestra priority desde el origen hasta el destino.</p>
             </div>
         </div>
     </section>
@@ -177,7 +179,7 @@
         
         <div id="auth-view" class="auth-container">
             <h3 style="text-align: center; color: var(--primario); margin-bottom: 10px;">Portal Privado</h3>
-            <p style="text-align: center; font-size: 0.95rem; color: #666; margin-bottom: 25px;">Inicia sesión para acceder al formulario.</p>
+            <p style="text-align: center; font-size: 0.95rem; color: #666; margin-bottom: 25px;">Inicia sesión para acceder al formulario de alta.</p>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
@@ -187,7 +189,7 @@
         <div id="form-alta-container">
             <h3 style="text-align: center; margin-bottom: 25px;">Alta de Cliente</h3>
             <form class="form-alta" action="https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec" method="POST">
-                <input type="text" name="nombre" placeholder="Nombre completo" required>
+                <input type="text" name="nombre" placeholder="Nombre completo del contacto" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="text" name="nombreEmpresa" placeholder="Empresa">
                 <input type="tel" name="celular" placeholder="Celular / WhatsApp">
@@ -197,7 +199,7 @@
                     <option value="Flete">Flete</option>
                     <option value="Auditoria">Auditoría</option>
                 </select>
-                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente</button>
+                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente en Base de Datos</button>
             </form>
         </div>
     </section>
