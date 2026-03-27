@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trazafines | Logística Integral</title>
+    <style>
+        :root { 
+            --primario: #0047ab; 
+            --whatsapp: #25d366; 
+            --oscuro: #333; 
+            --claro: #f4f4f4; 
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: white; color: var(--oscuro); scroll-behavior: smooth; }
+
+        /* Navegación */
+        nav { 
+            background: white; padding: 0.8rem 5%; display: flex; 
+            justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; 
+        }
+        
+        /* LOGO EN EL MENÚ */
+        .logo-nav { height: 45px; width: auto; display: block; }
+        
+        .nav-links { list-style: none; display: flex; gap: 25px; align-items: center; margin: 0; padding: 0; }
+        .nav-links a { text-decoration: none; color: var(--oscuro); font-weight: 500; }
+
+        .btn-nav-alta {
+            background: var(--primario);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold !important;
+            transition: 0.3s;
+        }
+        .btn-nav-alta:hover { background: #003580; transform: translateY(-2px); }
+
+        /* Hero con LOGO CENTRAL */
+        .hero { 
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'); 
+            height: 90vh; background-size: cover; background-position: center;
+            color: white; display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; text-align: center; padding: 0 20px;
+        }
+        
+        /* LOGO CENTRAL GRANDE */
+        .logo-hero { height: 180px; width: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+
+        .hero h1 { font-size: 3.5rem; margin: 0; letter-spacing: 4px; font-weight: bold; }
+        .hero p { font-size: 1.4rem; margin: 15px 0 35px; font-weight: 300; max-width: 600px; }
+
+        .btn-whatsapp-central {
+            background: var(--whatsapp);
+            color: white;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .btn-whatsapp-central:hover { background: #1eb954; transform: scale(1.08); }
+
+        /* Secciones */
+        .section { padding: 80px 10%; text-align: center; }
+        .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); }
+
+        /* Área Privada */
+        #seccion-registro { background-color: var(--primario); color: white; padding: 100px 10%; }
+        .auth-container { max-width: 400px; margin: 0 auto; background: white; padding: 35px; border-radius: 15px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .auth-container input { width: 100%; padding: 12px; margin: 12px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
+        #form-alta-container { display: none; max-width: 650px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; color: var(--oscuro); }
+        .form-alta { display: flex; flex-direction: column; gap: 18px; }
+        .form-alta input, .form-alta select { padding: 14px; border: 1px solid #ccc; border-radius: 8px; }
+        
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#">
+            <img src="trazafines.png" alt="Trazafines Logo" class="logo-nav">
+        </a>
+        <ul class="nav-links">
+            <li><a href="#valores">Valores</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#seccion-registro" class="btn-nav-alta">Comenzar Alta</a></li>
+            <li><button id="btn-logout" class="btn-logout" onclick="handleLogout()">Salir</button></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
+        <h1>TRAZAFINES</h1>
+        <p>Soluciones logísticas eficientes para tu empresa.</p>
+        
+        <a href="https://wa.me/8112209919?text=Hola!%20Solicito%20una%20cotización" class="btn-whatsapp-central" target="_blank">
+            <span>📲 Cotización Rápida</span>
+        </a>
+    </section>
+
+    <section id="valores" class="section">
+        <h2>Nuestros Valores</h2>
+        <div class="grid-valores">
+            <div class="card">
+                <h3>Eficiencia</h3>
+                <p>Optimizamos cada ruta para garantizar la entrega en tiempo récord.</p>
+            </div>
+            <div class="card">
+                <h3>Transparencia</h3>
+                <p>Trazabilidad total en tus envíos y procesos administrativos.</p>
+            </div>
+            <div class="card">
+                <h3>Compromiso</h3>
+                <p>Tu carga es nuestra prioridad desde el origen hasta el destino.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="section" style="background: var(--claro);">
+        <h2>Servicios Especializados</h2>
+        <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">Gestión integral de fletes, auditoría de paquetería y soluciones a medida para tu negocio logístico.</p>
+    </section>
+
+    <section id="seccion-registro">
+        <h2 style="text-align: center; margin-bottom: 40px;">Registro de Empresas</h2>
+        
+        <div id="auth-view" class="auth-container">
+            <h3 style="text-align: center; color: var(--primario); margin-bottom: 10px;">Portal Privado</h3>
+            <p style="text-align: center; font-size: 0.95rem; color: #666; margin-bottom: 25px;">Inicia sesión para acceder al formulario.</p>
+            <input type="email" id="login-email" placeholder="Correo electrónico">
+            <input type="password" id="login-password" placeholder="Contraseña">
+            <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
+            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta</button>
+        </div>
+
+        <div id="form-alta-container">
+            <h3 style="text-align: center; margin-bottom: 25px;">Alta de Cliente</h3>
+            <form class="form-alta" action="https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec" method="POST">
+                <input type="text" name="nombre" placeholder="Nombre completo" required>
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+                <input type="text" name="nombreEmpresa" placeholder="Nombre de la empresa">
+                <input type="tel" name="celular" placeholder="Celular / WhatsApp">
+                <input type="tel" name="telefonoFijo" placeholder="Teléfono Fijo">
+                <select name="servicio">
+                    <option value="Logistica">Logística</option>
+                    <option value="Flete">Flete</option>
+                    <option value="Auditoria">Auditoría</option>
+                </select>
+                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente</button>
+            </form>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 50px; background: #222; color: white;">
+        <img src="trazafines.png" alt="Logo" style="height: 40px; margin-bottom: 15px; filter: brightness(0) invert(1);">
+        <p style="margin-bottom: 10px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
+        <p style="font-size: 0.9rem; color: #bbb;">&copy; 2026 | Santa Catarina, N.L.</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhM6EzdUvaWOYczUg_4McUsHr3nyOOXM8",
+            authDomain: "trazafines-login.firebaseapp.com",
+            projectId: "trazafines-login",
+            storageBucket: "trazafines-login.firebasestorage.app",
+            messagingSenderId: "800521304253",
+            appId: "1:800521304253:web:06bbc8900103723bd91fd4",
+            measurementId: "G-M0Z28W84LT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.handleLogin = () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error: " + err.message));
+        };
+
+        window.handleRegister = () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then(() => alert("Cuenta creada."))
+                .catch(err => alert("Error: " + err.message));
+        };
+
+        window.handleLogout = () => signOut(auth);
+
+        onAuthStateChanged(auth, (user) => {
+            const authView = document.getElementById('auth-view');
+            const formView = document.getElementById('form-alta-container');
+            const logoutBtn = document.getElementById('btn-logout');
+
+            if (user) {
+                authView.style.display = 'none';
+                formView.style.display = 'block';
+                logoutBtn.style.display = 'block';
+            } else {
+                authView.style.display = 'block';
+                formView.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
