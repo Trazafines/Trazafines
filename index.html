@@ -14,7 +14,6 @@
             --claro: #f4f4f4; 
         }
 
-        /* --- ESTILOS BASE --- */
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: white; color: var(--oscuro); scroll-behavior: smooth; overflow-x: hidden; }
 
@@ -34,37 +33,37 @@
             padding: 8px 15px; border-radius: 5px; font-weight: bold !important;
         }
 
-        /* Hero Principal con NUEVA IMAGEN DE FONDO CLARA */
+        /* --- HERO CON MAPA DE FONDO --- */
         .hero { 
-            /* Agregamos un degradado claro para asegurar la legibilidad del texto */
-            background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('image_2b6843.jpg'); 
+            /* Usamos un mapa en tonos claros/grises para que el logo negro destaque */
+            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), 
+                        url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop'); 
             height: 90vh; min-height: 550px; background-size: cover; background-position: center;
             color: var(--oscuro); display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 0 20px;
         }
         
-        /* LOGO CENTRAL RESPONSIVO */
         .logo-hero { 
-            width: 85%; max-width: 380px; height: auto; 
+            width: 85%; max-width: 400px; height: auto; 
             margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); 
         }
 
-        .hero p { font-size: 1.3rem; margin-bottom: 35px; max-width: 600px; font-weight: 300; }
+        .hero p { font-size: 1.4rem; margin-bottom: 35px; max-width: 600px; font-weight: 400; color: #555; }
 
-        /* Botón WhatsApp Central */
         .btn-whatsapp-central {
             background: var(--whatsapp); color: white; text-decoration: none;
-            padding: 16px 30px; border-radius: 50px; font-weight: bold; font-size: 1.1rem;
+            padding: 16px 35px; border-radius: 50px; font-weight: bold; font-size: 1.1rem;
             display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
+        .btn-whatsapp-central:hover { transform: scale(1.05); }
 
         /* Secciones */
         .section { padding: 80px 10%; text-align: center; }
         .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
         .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); }
 
-        /* Área de Registro */
+        /* Registro */
         #seccion-registro { background-color: var(--primario); color: white; padding: 100px 10%; }
         .auth-container, #form-alta-container { 
             max-width: 500px; margin: 0 auto; background: white; 
@@ -78,17 +77,10 @@
             padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; 
         }
 
-        /* --- MEDIA QUERIES (CELULAR) --- */
         @media (max-width: 600px) {
-            nav { padding: 10px 3%; }
-            .logo-nav { height: 35px; }
-            .nav-links { gap: 8px; }
-            .nav-links a { font-size: 0.8rem; }
-            .logo-hero { width: 90%; max-width: 280px; }
+            .logo-hero { width: 90%; max-width: 300px; }
             .hero p { font-size: 1.1rem; }
-            .btn-whatsapp-central { width: 100%; max-width: 280px; justify-content: center; }
-            .section { padding: 60px 5%; }
-            #seccion-registro { padding: 60px 5%; }
+            .nav-links a { font-size: 0.8rem; }
         }
 
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; }
@@ -108,7 +100,7 @@
 
     <section class="hero">
         <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
-        <p>Soluciones logísticas eficientes para tu empresa.</p>
+        <p>Conectando rutas, optimizando tu logística.</p>
         <a href="https://wa.me/8112209919" class="btn-whatsapp-central" target="_blank">
             <span>📲 Cotización Rápida</span>
         </a>
@@ -117,15 +109,10 @@
     <section id="valores" class="section">
         <h2>Nuestros Valores</h2>
         <div class="grid-valores">
-            <div class="card"><h3>Eficiencia</h3><p>Optimizamos cada ruta para garantizar la entrega récord.</p></div>
-            <div class="card"><h3>Transparencia</h3><p>Trazabilidad total en tus envíos y procesos administrativos.</p></div>
-            <div class="card"><h3>Compromiso</h3><p>Tu carga es nuestra prioridad desde el origen hasta el destino.</p></div>
+            <div class="card"><h3>Eficiencia</h3><p>Rutas planeadas para la máxima puntualidad.</p></div>
+            <div class="card"><h3>Transparencia</h3><p>Información clara en cada etapa del proceso.</p></div>
+            <div class="card"><h3>Alcance</h3><p>Cobertura integral para tus necesidades de flete.</p></div>
         </div>
-    </section>
-
-    <section id="servicios" class="section" style="background: var(--claro);">
-        <h2>Servicios Especializados</h2>
-        <p>En Trazafines nos especializamos en fletes, auditoría de paquetería y logística integral.</p>
     </section>
 
     <section id="seccion-registro">
@@ -133,7 +120,6 @@
         
         <div id="auth-view" class="auth-container">
             <h3 style="text-align: center; color: var(--primario);">Acceso Privado</h3>
-            <p style="text-align: center; font-size: 0.9rem; color: #666;">Inicia sesión para dar de alta a tu empresa.</p>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
@@ -141,13 +127,12 @@
         </div>
 
         <div id="form-alta-container" style="display: none;">
-            <h3 style="text-align: center;">Formulario de Alta</h3>
+            <h3 style="text-align: center;">Alta de Cliente</h3>
             <form id="form-registro-cliente" class="form-alta">
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="text" name="nombreEmpresa" placeholder="Empresa">
                 <input type="tel" name="celular" placeholder="WhatsApp">
-                <input type="tel" name="telefonoFijo" placeholder="Tel Fijo">
                 <select name="servicio">
                     <option value="Logistica">Logística</option>
                     <option value="Flete">Flete</option>
@@ -225,21 +210,15 @@
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                 .then(response => {
                     alert("¡Registro exitoso! Redirigiendo a WhatsApp...");
-                    
                     const nombre = form.nombre.value;
-                    const empresa = form.nombreEmpresa.value || "Empresa no especificada";
-                    const servicio = form.servicio.value;
-
-                    const mensaje = `Hola! Soy ${nombre} de ${empresa}. Acabo de registrarme para el servicio de ${servicio} en Trazafines.`;
+                    const mensaje = `Hola! Soy ${nombre}. Acabo de registrarme en Trazafines para el servicio de ${form.servicio.value}.`;
                     const whatsappURL = `https://wa.me/8112209919?text=${encodeURIComponent(mensaje)}`;
-
                     window.location.href = whatsappURL;
                 })
                 .catch(error => {
-                    console.error('Error!', error.message);
-                    alert("Error al registrar datos.");
+                    alert("Error al registrar.");
                     btnEnviar.disabled = false;
-                    btnEnviar.innerText = "Intentar de nuevo";
+                    btnEnviar.innerText = "Registrar Cliente";
                 });
         });
     </script>
