@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trazafines | Logística Integral</title>
     <link rel="icon" type="image/png" href="Isotipo_sinfondo.png">
+    
     <style>
         :root { 
             --primario: #0047ab; 
@@ -13,22 +14,17 @@
             --claro: #f4f4f4; 
         }
 
-        /* --- ESTILOS RESPONSIVOS FUNDAMENTALES --- */
+        /* --- ESTILOS BASE --- */
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: white; color: var(--oscuro); scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* Navegación (Con Doble Identidad) */
+        /* Navegación */
         nav { 
             background: white; padding: 10px 5%; display: flex; 
             justify-content: space-between; align-items: center; 
             position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; 
         }
-        
-        /* Contenedor del Logo Superior Izquierdo */
-        .logo-nav-container { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        
-        /* EL ESCUDO (NUEVO) */
-        .isotipo-nav { height: 35px; width: auto; object-fit: contain; }
+        .logo-nav { height: 40px; width: auto; }
         
         .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: var(--oscuro); font-weight: 500; font-size: 0.9rem; }
@@ -46,7 +42,7 @@
             align-items: center; text-align: center; padding: 0 20px;
         }
         
-        /* LOGO HORIZONTAL CENTRAL (Impacto) */
+        /* LOGO CENTRAL RESPONSIVO */
         .logo-hero { 
             width: 85%; max-width: 380px; height: auto; 
             margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
@@ -61,14 +57,13 @@
             display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
             box-shadow: 0 8px 15px rgba(0,0,0,0.3);
         }
-        .btn-whatsapp-central:hover { transform: scale(1.05); background: #1eb954; }
 
-        /* Secciones Públicas */
+        /* Secciones */
         .section { padding: 80px 10%; text-align: center; }
         .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
         .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); }
 
-        /* AREA PRIVADA (Registro) */
+        /* Área de Registro */
         #seccion-registro { background-color: var(--primario); color: white; padding: 100px 10%; }
         .auth-container, #form-alta-container { 
             max-width: 500px; margin: 0 auto; background: white; 
@@ -82,17 +77,17 @@
             padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; 
         }
 
-        /* Ajustes para Celular (Media Queries) */
+        /* --- MEDIA QUERIES (CELULAR) --- */
         @media (max-width: 600px) {
             nav { padding: 10px 3%; }
-            .logo-nav-container { flex-wrap: wrap; justify-content: center; }
-            .isotipo-nav { height: 30px; }
-            .logo-nav-text { font-size: 0.8rem; }
-            .nav-links { gap: 8px; justify-content: center; width: 100%; }
+            .logo-nav { height: 35px; }
+            .nav-links { gap: 8px; }
             .nav-links a { font-size: 0.8rem; }
             .logo-hero { width: 90%; max-width: 280px; }
             .hero p { font-size: 1.1rem; }
             .btn-whatsapp-central { width: 100%; max-width: 280px; justify-content: center; }
+            .section { padding: 60px 5%; }
+            #seccion-registro { padding: 60px 5%; }
         }
 
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; }
@@ -101,9 +96,7 @@
 <body>
 
     <nav>
-        <a href="#" class="logo-nav-container">
-            <img src="Isotipo_sinfondo.png" alt="Escudo Trazafines" class="isotipo-nav">
-        </a>
+        <a href="#"><img src="Isotipo_sinfondo.png" alt="Escudo" class="logo-nav"></a>
         <ul class="nav-links">
             <li><a href="#valores">Valores</a></li>
             <li><a href="#servicios">Servicios</a></li>
@@ -113,7 +106,7 @@
     </nav>
 
     <section class="hero">
-        <img src="trazafines.png" alt="Branding Trazafines" class="logo-hero">
+        <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
         <p>Soluciones logísticas eficientes para tu empresa.</p>
         <a href="https://wa.me/8112209919" class="btn-whatsapp-central" target="_blank">
             <span>📲 Cotización Rápida</span>
@@ -124,14 +117,14 @@
         <h2>Nuestros Valores</h2>
         <div class="grid-valores">
             <div class="card"><h3>Eficiencia</h3><p>Optimizamos cada ruta para garantizar la entrega récord.</p></div>
-            <div class="card"><h3>Transparencia</h3><p>Trazabilidad total en tus envíos y procesos.</p></div>
-            <div class="card"><h3>Compromiso</h3><p>Tu carga es nuestra prioridad siempre.</p></div>
+            <div class="card"><h3>Transparencia</h3><p>Trazabilidad total en tus envíos y procesos administrativos.</p></div>
+            <div class="card"><h3>Compromiso</h3><p>Tu carga es nuestra prioridad desde el origen hasta el destino.</p></div>
         </div>
     </section>
 
     <section id="servicios" class="section" style="background: var(--claro);">
         <h2>Servicios Especializados</h2>
-        <p>Gestión de fletes, auditoría de paquetería y soluciones a medida.</p>
+        <p>En Trazafines nos especializamos en fletes, auditoría de paquetería y logística integral.</p>
     </section>
 
     <section id="seccion-registro">
@@ -139,15 +132,16 @@
         
         <div id="auth-view" class="auth-container">
             <h3 style="text-align: center; color: var(--primario);">Acceso Privado</h3>
+            <p style="text-align: center; font-size: 0.9rem; color: #666;">Inicia sesión para dar de alta a tu empresa.</p>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
-            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta Nueva</button>
+            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta</button>
         </div>
 
         <div id="form-alta-container" style="display: none;">
-            <h3 style="text-align: center;">Alta de Cliente</h3>
-            <form action="https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec" method="POST">
+            <h3 style="text-align: center;">Formulario de Alta</h3>
+            <form id="form-registro-cliente" class="form-alta">
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="text" name="nombreEmpresa" placeholder="Empresa">
@@ -158,22 +152,22 @@
                     <option value="Flete">Flete</option>
                     <option value="Auditoria">Auditoría</option>
                 </select>
-                <button type="submit" class="btn-auth" style="background: var(--whatsapp);">Registrar Cliente en Sheets</button>
+                <button type="submit" class="btn-auth" id="btn-enviar-datos" style="background: var(--whatsapp);">
+                    Registrar y Abrir WhatsApp
+                </button>
             </form>
         </div>
     </section>
 
     <footer style="text-align: center; padding: 40px; background: #222; color: white;">
-        <img src="Isotipo_sinfondo.png" alt="Escudo Blanco" style="height: 30px; margin-bottom: 10px; filter: brightness(0) invert(1);">
-        <p style="margin-bottom: 10px; font-weight: bold;">TRAZAFINES LOGÍSTICA</p>
-        <p style="font-size: 0.8rem; color: #bbb;">&copy; 2026 | Santa Catarina, N.L.</p>
+        <img src="Isotipo_sinfondo.png" alt="Logo" style="height: 35px; margin-bottom: 10px; filter: brightness(0) invert(1);">
+        <p>&copy; 2026 Trazafines Logística | Santa Catarina, N.L.</p>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Tus credenciales reales
         const firebaseConfig = {
             apiKey: "AIzaSyDhM6EzdUvaWOYczUg_4McUsHr3nyOOXM8",
             authDomain: "trazafines-login.firebaseapp.com",
@@ -190,15 +184,13 @@
         window.handleLogin = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error al entrar: " + err.message));
+            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error: " + err.message));
         };
 
         window.handleRegister = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then(() => alert("¡Cuenta creada con éxito!"))
-                .catch(err => alert("Error: " + err.message));
+            createUserWithEmailAndPassword(auth, email, pass).then(() => alert("Cuenta creada.")).catch(err => alert("Error: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -207,7 +199,6 @@
             const authView = document.getElementById('auth-view');
             const formView = document.getElementById('form-alta-container');
             const logoutBtn = document.getElementById('btn-logout');
-
             if (user) {
                 authView.style.display = 'none';
                 formView.style.display = 'block';
@@ -217,6 +208,38 @@
                 formView.style.display = 'none';
                 logoutBtn.style.display = 'none';
             }
+        });
+    </script>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec';
+        const form = document.getElementById('form-registro-cliente');
+        const btnEnviar = document.getElementById('btn-enviar-datos');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Registrando... ⏳";
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    alert("¡Registro exitoso! Redirigiendo a WhatsApp...");
+                    
+                    const nombre = form.nombre.value;
+                    const empresa = form.nombreEmpresa.value || "Empresa no especificada";
+                    const servicio = form.servicio.value;
+
+                    const mensaje = `Hola! Soy ${nombre} de ${empresa}. Acabo de registrarme para el servicio de ${servicio} en Trazafines.`;
+                    const whatsappURL = `https://wa.me/8112209919?text=${encodeURIComponent(mensaje)}`;
+
+                    window.location.href = whatsappURL;
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert("Error al registrar datos.");
+                    btnEnviar.disabled = false;
+                    btnEnviar.innerText = "Intentar de nuevo";
+                });
         });
     </script>
 </body>
