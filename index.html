@@ -34,10 +34,11 @@
             padding: 8px 15px; border-radius: 5px; font-weight: bold !important;
         }
 
-        /* Hero Principal con NUEVA IMAGEN DE FONDO DE MAPA */
+        /* --- HERO PRINCIPAL CON FONDO DEL CERRO DE LA SILLA --- */
         .hero { 
-            /* Agregamos un degradado claro para asegurar la legibilidad del texto */
-            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url('image_2bf2c8.jpg'); 
+            /* Capa blanca (75%) para garantizar legibilidad del logo negro */
+            background: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), 
+                        url('el-cerro-de-la-silla.jpg'); 
             height: 90vh; min-height: 550px; background-size: cover; background-position: center;
             color: var(--oscuro); display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 0 20px;
@@ -59,12 +60,12 @@
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
-        /* Secciones */
+        /* Secciones Públicas */
         .section { padding: 80px 10%; text-align: center; }
         .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
         .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); }
 
-        /* Área de Registro */
+        /* Área de Registro (Privada) */
         #seccion-registro { background-color: var(--primario); color: white; padding: 100px 10%; }
         .auth-container, #form-alta-container { 
             max-width: 500px; margin: 0 auto; background: white; 
@@ -108,7 +109,7 @@
 
     <section class="hero">
         <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
-        <p>Soluciones logísticas eficientes para tu empresa.</p>
+        <p>Soluciones logísticas eficientes desde el corazón de Nuevo León.</p>
         <a href="https://wa.me/8112209919" class="btn-whatsapp-central" target="_blank">
             <span>📲 Cotización Rápida</span>
         </a>
@@ -137,7 +138,7 @@
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
-            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta</button>
+            <button class="btn-auth" style="background: #6c757d;" onclick="handleRegister()">Crear Cuenta Nueva</button>
         </div>
 
         <div id="form-alta-container" style="display: none;">
@@ -185,13 +186,15 @@
         window.handleLogin = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error: " + err.message));
+            signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Error al entrar: " + err.message));
         };
 
         window.handleRegister = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            createUserWithEmailAndPassword(auth, email, pass).then(() => alert("Cuenta creada.")).catch(err => alert("Error: " + err.message));
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then(() => alert("¡Cuenta creada con éxito!"))
+                .catch(err => alert("Error: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -200,6 +203,7 @@
             const authView = document.getElementById('auth-view');
             const formView = document.getElementById('form-alta-container');
             const logoutBtn = document.getElementById('btn-logout');
+
             if (user) {
                 authView.style.display = 'none';
                 formView.style.display = 'block';
@@ -213,31 +217,35 @@
     </script>
 
     <script>
+        // Mantenemos tu URL real del Script de Google
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxLw_b7_Rpy6z44kKDBt0zazi11EniyqXFZxJtSgOC6wjpLSOG7RU50mICZg0Cw5XRM/exec';
         const form = document.getElementById('form-registro-cliente');
         const btnEnviar = document.getElementById('btn-enviar-datos');
 
         form.addEventListener('submit', e => {
-            e.preventDefault();
+            e.preventDefault(); // Evita la pantalla negra de éxito
             btnEnviar.disabled = true;
             btnEnviar.innerText = "Registrando... ⏳";
 
+            // Envía los datos a Google Sheets por detrás
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                 .then(response => {
-                    alert("¡Registro exitoso! Redirigiendo a WhatsApp...");
+                    alert("¡Registro exitoso en base de datos! Abriendo WhatsApp...");
                     
                     const nombre = form.nombre.value;
                     const empresa = form.nombreEmpresa.value || "Empresa no especificada";
                     const servicio = form.servicio.value;
 
-                    const mensaje = `Hola! Soy ${nombre} de ${empresa}. Acabo de registrarme para el servicio de ${servicio} en Trazafines.`;
+                    // Construye el mensaje para WhatsApp
+                    const mensaje = `Hola! Soy ${nombre} de la empresa ${empresa}. Acabo de registrarme para el servicio de ${servicio} en Trazafines.`;
                     const whatsappURL = `https://wa.me/8112209919?text=${encodeURIComponent(mensaje)}`;
 
+                    // Redirige al chat
                     window.location.href = whatsappURL;
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    alert("Error al registrar datos.");
+                    alert("Hubo un error al registrar los datos en Sheets.");
                     btnEnviar.disabled = false;
                     btnEnviar.innerText = "Intentar de nuevo";
                 });
