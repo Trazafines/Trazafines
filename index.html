@@ -24,37 +24,28 @@
             position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; 
         }
         .logo-nav { height: 40px; width: auto; }
-        
         .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: var(--oscuro); font-weight: 500; font-size: 0.9rem; }
+        .btn-nav-alta { background: var(--primario); color: white !important; padding: 8px 15px; border-radius: 5px; font-weight: bold !important; }
 
-        .btn-nav-alta {
-            background: var(--primario); color: white !important;
-            padding: 8px 15px; border-radius: 5px; font-weight: bold !important;
-        }
-
-        /* --- HERO CON MAPA DE FONDO --- */
+        /* --- HERO CON MAPA DE MONTERREY --- */
         .hero { 
-            /* Usamos un mapa en tonos claros/grises para que el logo negro destaque */
-            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), 
-                        url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop'); 
+            /* Capa blanca (85%) para que el mapa se vea de fondo pero no estorbe al logo */
+            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), 
+                        url('mapa_mty.jpg'); 
             height: 90vh; min-height: 550px; background-size: cover; background-position: center;
             color: var(--oscuro); display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 0 20px;
         }
         
-        .logo-hero { 
-            width: 85%; max-width: 400px; height: auto; 
-            margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); 
-        }
-
-        .hero p { font-size: 1.4rem; margin-bottom: 35px; max-width: 600px; font-weight: 400; color: #555; }
+        .logo-hero { width: 85%; max-width: 400px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); }
+        .hero p { font-size: 1.4rem; margin-bottom: 35px; max-width: 600px; font-weight: 400; color: #444; }
 
         .btn-whatsapp-central {
             background: var(--whatsapp); color: white; text-decoration: none;
             padding: 16px 35px; border-radius: 50px; font-weight: bold; font-size: 1.1rem;
             display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
         }
         .btn-whatsapp-central:hover { transform: scale(1.05); }
 
@@ -72,15 +63,12 @@
         .auth-container input, .form-alta input, .form-alta select { 
             width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem;
         }
-        .btn-auth { 
-            width: 100%; background: var(--primario); color: white; border: none; 
-            padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; 
-        }
+        .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
         @media (max-width: 600px) {
-            .logo-hero { width: 90%; max-width: 300px; }
+            .logo-hero { width: 95%; }
             .hero p { font-size: 1.1rem; }
-            .nav-links a { font-size: 0.8rem; }
+            nav { padding: 10px 3%; }
         }
 
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; }
@@ -100,18 +88,18 @@
 
     <section class="hero">
         <img src="trazafines.png" alt="Logo Trazafines" class="logo-hero">
-        <p>Conectando rutas, optimizando tu logística.</p>
+        <p>Expertos en logística local y nacional desde el corazón de Nuevo León.</p>
         <a href="https://wa.me/8112209919" class="btn-whatsapp-central" target="_blank">
             <span>📲 Cotización Rápida</span>
         </a>
     </section>
 
     <section id="valores" class="section">
-        <h2>Nuestros Valores</h2>
+        <h2>Trazafines: Tu Aliado Logístico</h2>
         <div class="grid-valores">
-            <div class="card"><h3>Eficiencia</h3><p>Rutas planeadas para la máxima puntualidad.</p></div>
-            <div class="card"><h3>Transparencia</h3><p>Información clara en cada etapa del proceso.</p></div>
-            <div class="card"><h3>Alcance</h3><p>Cobertura integral para tus necesidades de flete.</p></div>
+            <div class="card"><h3>Experiencia Local</h3><p>Conocemos cada rincón del área metropolitana para entregas eficientes.</p></div>
+            <div class="card"><h3>Transparencia</h3><p>Seguimiento claro y directo en cada flete y servicio.</p></div>
+            <div class="card"><h3>Compromiso</h3><p>Nuestra prioridad es que tu carga llegue segura y a tiempo.</p></div>
         </div>
     </section>
 
@@ -176,7 +164,7 @@
         window.handleRegister = () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            createUserWithEmailAndPassword(auth, email, pass).then(() => alert("Cuenta creada.")).catch(err => alert("Error: " + err.message));
+            createUserWithEmailAndPassword(auth, email, pass).then(() => alert("¡Cuenta creada!")).catch(err => alert("Error: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -209,16 +197,16 @@
 
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                 .then(response => {
-                    alert("¡Registro exitoso! Redirigiendo a WhatsApp...");
+                    alert("¡Éxito! Redirigiendo a WhatsApp...");
                     const nombre = form.nombre.value;
-                    const mensaje = `Hola! Soy ${nombre}. Acabo de registrarme en Trazafines para el servicio de ${form.servicio.value}.`;
+                    const mensaje = `Hola! Soy ${nombre}. Me registré en Trazafines para: ${form.servicio.value}.`;
                     const whatsappURL = `https://wa.me/8112209919?text=${encodeURIComponent(mensaje)}`;
                     window.location.href = whatsappURL;
                 })
                 .catch(error => {
-                    alert("Error al registrar.");
+                    alert("Error en el registro.");
                     btnEnviar.disabled = false;
-                    btnEnviar.innerText = "Registrar Cliente";
+                    btnEnviar.innerText = "Reintentar";
                 });
         });
     </script>
