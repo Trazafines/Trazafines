@@ -61,18 +61,15 @@
         .mapa-seccion { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--borde); box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column;}
         .mapa-seccion label { display: block; font-weight: 700; color: var(--primario); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
         
-        /* Ajuste de Buscador con CP */
-        .search-group { display: flex; gap: 8px; margin-bottom: 5px; }
-        .search-group input { padding: 12px 15px; border: 1px solid var(--borde); border-radius: 8px; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        .search-group input:focus { border-color: var(--primario); box-shadow: 0 0 0 3px rgba(0,71,171,0.1); }
-        .input-calle { flex: 2; }
-        .input-cp { flex: 1; max-width: 90px; text-align: center; }
-        .btn-search { background: var(--primario); color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-search:hover { background: var(--secundario); }
+        /* Ajuste de Buscadores Apilados */
+        .input-calle, .input-cp { width: 100%; padding: 12px 15px; border: 1px solid var(--borde); border-radius: 8px; font-size: 0.95rem; outline: none; transition: 0.3s; margin-bottom: 8px; }
+        .input-calle:focus, .input-cp:focus { border-color: var(--primario); box-shadow: 0 0 0 3px rgba(0,71,171,0.1); }
+        .btn-search { width: 100%; background: #64748b; color: white; border: none; border-radius: 8px; padding: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-bottom: 10px; }
+        .btn-search:hover { background: var(--oscuro); }
 
-        /* Lista de Colonias Desplegable */
-        .lista-colonias { margin-bottom: 10px; border-radius: 8px; max-height: 120px; overflow-y: auto; background: white; }
-        .lista-colonias div { padding: 8px 12px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--borde); border-top: none; }
+        /* Lista de Colonias Desplegable SEPOMEX */
+        .lista-colonias { margin-bottom: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; background: white; }
+        .lista-colonias div { padding: 10px 12px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--borde); border-top: none; }
         .lista-colonias div:first-child { border-top: 1px solid var(--borde); border-top-left-radius: 8px; border-top-right-radius: 8px; }
         .lista-colonias div:last-child { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
         .lista-colonias div:hover { background: var(--primario); color: white; }
@@ -94,10 +91,6 @@
             .nav-links { gap: 8px; }
             .nav-links a { font-size: 0.8rem; }
             .logo-hero { width: 90%; max-width: 280px; }
-            .search-group { flex-wrap: wrap; }
-            .input-calle { min-width: 100%; margin-bottom: 5px;}
-            .input-cp { flex: 1; max-width: none; text-align: left;}
-            .btn-search { flex: 1; padding: 12px; }
         }
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
     </style>
@@ -151,9 +144,7 @@
                 <span>O usa tu correo electrónico</span>
             </div>
 
-            <label for="login-email" style="display:none;">Correo electrónico</label>
             <input type="email" id="login-email" placeholder="Correo electrónico">
-            <label for="login-password" style="display:none;">Contraseña</label>
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
             <button class="btn-auth" style="background: transparent; color: var(--oscuro); border: 1px solid #ccc; margin-top: 15px;" onclick="handleRegister()">Crear Cuenta Nueva</button>
@@ -165,9 +156,7 @@
             
             <p id="usuarioNombre" style="font-weight: bold; color: var(--primario); margin-bottom: 15px;"></p>
 
-            <label for="negocio-nombre" style="display:none;">Nombre de la Empresa</label>
             <input type="text" id="negocio-nombre" placeholder="Nombre de tu Empresa / Razón Social" required>
-            <label for="negocio-celular" style="display:none;">WhatsApp</label>
             <input type="tel" id="negocio-celular" placeholder="WhatsApp de Contacto" required>
             <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; margin-top: 20px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="validarAntesDeAbrir()">
                 🗺️ Trazar Ruta en el Mapa
@@ -179,28 +168,26 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Trazabilidad de Ruta</h3>
-                <p>Busca la dirección, ingresa el C.P. o selecciona directamente en el mapa.</p>
+                <p>Ingresa la calle, y escribe tu Código Postal para buscar en la base de datos oficial.</p>
             </div>
             <div class="grid-mapas">
                 
                 <div class="mapa-seccion">
                     <label for="dir1">📍 Punto de Recolección</label>
-                    <div class="search-group">
-                        <input id="dir1" class="input-calle" placeholder="Ej. Av. Constitución..." />
-                        <input id="cp1" class="input-cp" placeholder="C.P." maxlength="5" />
-                        <button class="btn-search" onclick="buscar1()">Buscar</button>
-                    </div>
+                    <input id="dir1" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
+                    <input id="cp1" class="input-cp" placeholder="Ingresa tu Código Postal (Ej. 64000)" maxlength="5" />
+                    <button class="btn-search" onclick="buscarManual1()">Ubicar calle en el mapa</button>
+                    
                     <div id="colonias1" class="lista-colonias"></div>
                     <div id="mapa1" class="mapa-box"></div>
                 </div>
 
                 <div class="mapa-seccion">
                     <label for="dir2">🏁 Punto de Entrega</label>
-                    <div class="search-group">
-                        <input id="dir2" class="input-calle" placeholder="Ej. Parque Industrial..." />
-                        <input id="cp2" class="input-cp" placeholder="C.P." maxlength="5" />
-                        <button class="btn-search" onclick="buscar2()">Buscar</button>
-                    </div>
+                    <input id="dir2" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
+                    <input id="cp2" class="input-cp" placeholder="Ingresa tu Código Postal (Ej. 64000)" maxlength="5" />
+                    <button class="btn-search" onclick="buscarManual2()">Ubicar calle en el mapa</button>
+                    
                     <div id="colonias2" class="lista-colonias"></div>
                     <div id="mapa2" class="mapa-box"></div>
                 </div>
@@ -251,64 +238,76 @@
 
     <script>
         const appsScriptEndpoint = "https://script.google.com/macros/s/AKfycby5bSFHkJkW8U6zGQSNxrAN8Ntob3922TnzK0zSC1F04a5oC1ElSBXfbT1STV1Eakfk/exec";
+        const headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
+        
         let mapa1, mapa2, marker1, marker2;
         let ultimoEnvioClave = null;
+        let baseCodigosPostales = []; // Aquí se guardará la info de SEPOMEX
 
+        // --- 1. CARGA DEL ARCHIVO TXT DE SEPOMEX ---
+        async function cargarBaseTXT() {
+            try {
+                // Asegúrate de que el archivo se llame exactamente así en tu GitHub
+                const response = await fetch('Nuevo_Leon.txt'); 
+                if (!response.ok) throw new Error("No se encontró el archivo TXT.");
+                
+                // Procesamiento para ignorar acentos extraños si el archivo no es UTF-8
+                const buffer = await response.arrayBuffer();
+                const decoder = new TextDecoder('iso-8859-1'); 
+                const texto = decoder.decode(buffer);
+                
+                const lineas = texto.split('\n');
+                
+                for (let i = 2; i < lineas.length; i++) { // Nos saltamos las dos primeras líneas de títulos
+                    const columnas = lineas[i].split('|');
+                    if (columnas.length > 4) {
+                        baseCodigosPostales.push({
+                            cp: columnas[0].trim(),
+                            colonia: columnas[1].trim(),
+                            municipio: columnas[3].trim()
+                        });
+                    }
+                }
+                console.log("Base de datos de Códigos Postales cargada:", baseCodigosPostales.length, "registros.");
+            } catch (error) {
+                console.error("Aviso: No se pudo cargar Nuevo_Leon.txt. Súbelo a tu servidor. Error: ", error);
+            }
+        }
+        
+        // Ejecutar carga al abrir la página
+        window.onload = cargarBaseTXT;
+
+        // --- 2. FUNCIONES DE LOGIN ---
         function setUsuarioBtn(text) {
             const usuarioTexto = document.getElementById("usuarioNombre");
             if (usuarioTexto) usuarioTexto.textContent = text;
         }
 
-        // EL SECRETO: Cambiar "application/json" por "text/plain" en el header para que Google no bloquee
-        const headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
-
         async function handleLogin() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce tu email y contraseña.");
-
             try {
-                const res = await fetch(appsScriptEndpoint, {
-                    method: "POST",
-                    headers: headersSeguros,
-                    body: JSON.stringify({ action: "login", email, contraseña: pass })
-                });
+                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "login", email, contraseña: pass }) });
                 const data = await res.json();
-                if (data.status === "éxito") {
-                    setUsuarioBtn(`Hola, ${data.profile.nombre} ${data.profile.apellidos}`);
-                    authViewShow(false);
-                } else {
-                    alert("Credenciales incorrectas: " + (data.message || ""));
-                }
-            } catch(e) {
-                alert("Hubo un problema de conexión al iniciar sesión.");
-            }
+                if (data.status === "éxito") { setUsuarioBtn(`Hola, ${data.profile.nombre} ${data.profile.apellidos}`); authViewShow(false); }
+                else alert("Credenciales incorrectas: " + (data.message || ""));
+            } catch(e) { alert("Hubo un problema de conexión al iniciar sesión."); }
         }
 
         async function handleRegister() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce email y contraseña para registrarte.");
-
             try {
-                const res = await fetch(appsScriptEndpoint, {
-                    method: "POST",
-                    headers: headersSeguros,
-                    body: JSON.stringify({ action: "register", nombre:"", apellidos:"", empresa:"", telefono:"", email, contraseña: pass, origen:"", destino:"" })
-                });
+                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "register", nombre:"", apellidos:"", empresa:"", telefono:"", email, contraseña: pass, origen:"", destino:"" }) });
                 const data = await res.json();
                 if (data.status === "éxito") alert("Usuario registrado correctamente.");
                 else alert("No se pudo registrar: " + (data.message || "Intenta con otro correo"));
-            } catch(e) {
-                alert("Hubo un problema de conexión al registrar.");
-            }
+            } catch(e) { alert("Hubo un problema de conexión al registrar."); }
         }
 
-        function handleLogout() {
-            setUsuarioBtn("");
-            authViewShow(true);
-            if (window.firebaseSignOut) window.firebaseSignOut();
-        }
+        function handleLogout() { setUsuarioBtn(""); authViewShow(true); if (window.firebaseSignOut) window.firebaseSignOut(); }
 
         function authViewShow(guest) {
             document.getElementById("auth-view").style.display = guest ? "block" : "none";
@@ -316,6 +315,7 @@
             document.getElementById("btn-logout").style.display = guest ? "none" : "block";
         }
 
+        // --- 3. LÓGICA DE MAPAS ---
         function validarAntesDeAbrir() {
             const negocio = document.getElementById("negocio-nombre").value.trim();
             const cel = document.getElementById("negocio-celular").value.trim();
@@ -323,11 +323,7 @@
             abrirModal();
         }
 
-        function abrirModal() {
-            document.getElementById("modal").style.display = "flex";
-            setTimeout(iniciarMapas, 300);
-        }
-
+        function abrirModal() { document.getElementById("modal").style.display = "flex"; setTimeout(iniciarMapas, 300); }
         function cerrar() { document.getElementById("modal").style.display = "none"; }
 
         function iniciarMapas() {
@@ -362,69 +358,74 @@
             }).catch(err => console.error(err));
         }
 
-        // BÚSQUEDA NORMAL POR CALLE
-        function buscar1() { buscarMapa('dir1', mapa1, 1); }
-        function buscar2() { buscarMapa('dir2', mapa2, 2); }
+        // --- 4. BÚSQUEDA EN BASE LOCAL DE SEPOMEX (NUEVO) ---
+        document.getElementById('cp1').addEventListener('input', () => procesarCPLOCAL('cp1', 'colonias1', 'dir1', mapa1, 1));
+        document.getElementById('cp2').addEventListener('input', () => procesarCPLOCAL('cp2', 'colonias2', 'dir2', mapa2, 2));
 
-        function buscarMapa(idCalle, mapa, num) {
-            const val = document.getElementById(idCalle).value.trim();
-            if (!val) return;
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(val)}`)
+        function procesarCPLOCAL(idCp, listaId, idDir, mapa, num) {
+            const cpBuscado = document.getElementById(idCp).value.trim();
+            const lista = document.getElementById(listaId);
+            lista.innerHTML = ""; // Limpiar lista anterior
+
+            if (cpBuscado.length < 4) return; // Esperar a que escriba casi completo
+
+            const resultados = baseCodigosPostales.filter(item => item.cp === cpBuscado);
+
+            if (resultados.length === 0) {
+                if(cpBuscado.length === 5) {
+                    lista.innerHTML = "<div style='color:#dc3545;'>C.P. no encontrado en la base.</div>";
+                    setTimeout(() => lista.innerHTML = "", 3000);
+                }
+                return;
+            }
+
+            // Mostrar resultados de SEPOMEX
+            resultados.forEach(lugar => {
+                const div = document.createElement("div");
+                div.innerHTML = `<b>${lugar.colonia}</b>, ${lugar.municipio}`;
+                div.onclick = () => {
+                    // Actualizar el campo de calle para que el usuario no tenga que escribir tanto
+                    const direccionActual = document.getElementById(idDir).value;
+                    document.getElementById(idDir).value = `${direccionActual ? direccionActual + ', ' : ''}Col. ${lugar.colonia}, ${lugar.municipio}, N.L.`;
+                    lista.innerHTML = ""; // Cerrar menú
+                    
+                    // Intentar mover el mapa a esa colonia
+                    centrarMapaEnColonia(`${lugar.colonia}, ${lugar.municipio}, Nuevo León`, mapa, num);
+                };
+                lista.appendChild(div);
+            });
+        }
+
+        function centrarMapaEnColonia(busqueda, mapa, num) {
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(busqueda)}`)
             .then(r => r.json()).then(data => {
                 if (data.length) { 
-                    mapa.setView([data[0].lat, data[0].lon], 15); 
+                    mapa.setView([data[0].lat, data[0].lon], 14); 
                     ponerMarker(data[0], num);
-                } else alert("No se encontró la dirección.");
-            });
-        }
-
-        // BÚSQUEDA POR CÓDIGO POSTAL (NUEVA FUNCIÓN)
-        document.getElementById('cp1').addEventListener('change', () => buscarCP('cp1', mapa1, 1, 'colonias1'));
-        document.getElementById('cp2').addEventListener('change', () => buscarCP('cp2', mapa2, 2, 'colonias2'));
-
-        function buscarCP(idCp, mapa, num, listaId) {
-            const cp = document.getElementById(idCp).value.trim();
-            if(!cp) return;
-            
-            const lista = document.getElementById(listaId);
-            lista.innerHTML = "<div style='color:gray;'>Buscando colonias...</div>";
-
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&postalcode=${cp}&country=Mexico`)
-            .then(r => r.json())
-            .then(data => {
-                lista.innerHTML = "";
-                if(data.length === 0) {
-                    lista.innerHTML = "<div style='color:red;'>C.P. no encontrado</div>";
-                    setTimeout(() => lista.innerHTML = "", 3000);
-                    return;
                 }
-                
-                data.forEach(lugar => {
-                    const div = document.createElement("div");
-                    div.innerText = lugar.display_name;
-                    div.onclick = () => {
-                        mapa.setView([lugar.lat, lugar.lon], 15);
-                        ponerMarker([lugar.lat, lugar.lon], num);
-                        document.getElementById('dir' + num).value = lugar.display_name;
-                        lista.innerHTML = ""; // Limpia la lista al seleccionar
-                    };
-                    lista.appendChild(div);
-                });
-            }).catch(e => {
-                lista.innerHTML = "<div style='color:red;'>Error de red</div>";
             });
         }
 
+        function buscarManual1() { centrarMapaEnColonia(document.getElementById("dir1").value, mapa1, 1); }
+        function buscarManual2() { centrarMapaEnColonia(document.getElementById("dir2").value, mapa2, 2); }
+
+        // --- 5. ENVÍO DE DATOS ---
         async function validarYEnviar() {
             const d1 = document.getElementById('dir1').value.trim();
+            const cp1 = document.getElementById('cp1').value.trim();
             const d2 = document.getElementById('dir2').value.trim();
+            const cp2 = document.getElementById('cp2').value.trim();
+            
             const negocio = document.getElementById('negocio-nombre').value.trim();
             const celular = document.getElementById('negocio-celular').value.trim();
 
-            if (!d1 || !d2) return alert("Por favor, selecciona ambos puntos en los mapas.");
+            if (!d1 || !d2) return alert("Por favor, llena los campos de recolección y entrega.");
 
-            const key = `${negocio}|${celular}|${d1}|${d2}`;
-            if (ultimoEnvioClave === key) return alert("Esta solicitud ya se procesó, revisa tu WhatsApp ya enviado.");
+            const direccion1Completa = `${d1} (C.P. ${cp1})`;
+            const direccion2Completa = `${d2} (C.P. ${cp2})`;
+
+            const key = `${negocio}|${celular}|${direccion1Completa}|${direccion2Completa}`;
+            if (ultimoEnvioClave === key) return alert("Esta solicitud ya se procesó, revisa tu WhatsApp.");
             ultimoEnvioClave = key;
 
             const btn = document.getElementById('btn-confirmar-envio');
@@ -432,28 +433,20 @@
             btn.disabled = true;
 
             const body = JSON.stringify({
-                action: "register", nombre: negocio, apellidos: "", empresa: negocio, telefono: celular, email: celular, contraseña: "", origen: d1, destino: d2
+                action: "register", nombre: negocio, apellidos: "", empresa: negocio, telefono: celular, email: celular, contraseña: "", origen: direccion1Completa, destino: direccion2Completa
             });
 
             try {
-                // AQUÍ USAMOS LOS HEADERS SEGUROS
-                const res = await fetch(appsScriptEndpoint, {
-                    method: "POST",
-                    headers: headersSeguros,
-                    body
-                });
+                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body });
                 const data = await res.json();
                 if (data.status === "éxito") {
-                    const msg = `NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${d1}%0A%0AEntrega:%0A${d2}`;
+                    const msg = `NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${direccion1Completa}%0A%0AEntrega:%0A${direccion2Completa}`;
                     window.open(`https://wa.me/5218112209919?text=${msg}`, "_blank");
                     alert("Solicitud registrada. Se abrirá WhatsApp.");
                     cerrar();
-                } else {
-                    alert("No se registró: " + (data.message || "solicitud duplicada"));
-                }
+                } else alert("No se registró: " + (data.message || "solicitud duplicada"));
             } catch (error) {
                 alert("Hubo un problema de conexión. Intenta de nuevo.");
-                console.error("Error:", error);
             } finally {
                 btn.innerText = "✅ Confirmar y Generar Guía";
                 btn.disabled = false;
