@@ -72,6 +72,14 @@
             .logo-hero { width: 90%; max-width: 280px; }
         }
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
+        
+        /* --- ESTILOS NUEVOS PARA BOTÓN DE GOOGLE --- */
+        .btn-google { background: white; color: var(--oscuro); border: 1px solid var(--borde); display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .btn-google:hover { background: #f8fafc; }
+        .btn-google img { width: 22px; height: 22px; }
+        .divisor { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #94a3b8; font-size: 0.9rem; }
+        .divisor::before, .divisor::after { content: ''; flex: 1; border-bottom: 1px solid var(--borde); }
+        .divisor span { padding: 0 10px; }
     </style>
 </head>
 <body>
@@ -112,6 +120,16 @@
         <div id="auth-view" class="auth-container">
             <h3 style="color: var(--primario); margin-top: 0; font-size: 1.5rem;">Acceso Privado</h3>
             <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 20px;">Inicia sesión para gestionar tus solicitudes de flete.</p>
+            
+            <button class="btn-auth btn-google" onclick="handleGoogleLogin()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+                Continuar con Google
+            </button>
+
+            <div class="divisor">
+                <span>O usa tu correo electrónico</span>
+            </div>
+
             <label for="login-email">Correo electrónico</label>
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <label for="login-password">Contraseña</label>
@@ -123,6 +141,9 @@
         <div id="form-alta-container" style="display: none;">
             <h3 style="color: var(--primario); margin-top: 0; font-size: 1.5rem;">Solicitar Repartidor</h3>
             <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px;">Ingresa tus datos y abre el mapa interactivo para trazar la ruta de tu carga.</p>
+            
+            <p id="usuarioNombre" style="font-weight: bold; color: var(--primario); margin-bottom: 15px;"></p>
+
             <label for="negocio-nombre">Nombre de la Empresa / Razón Social</label>
             <input type="text" id="negocio-nombre" placeholder="Nombre de tu Empresa / Razón Social" required>
             <label for="negocio-celular">WhatsApp de Contacto</label>
@@ -220,6 +241,8 @@
         function handleLogout() {
             setUsuarioBtn("");
             authViewShow(true);
+            // Cerramos sesión de Firebase por si entraron con Google
+            if (window.firebaseSignOut) window.firebaseSignOut();
         }
 
         function authViewShow(guest) {
@@ -318,7 +341,6 @@
             btn.innerText = "Enviando... ⏳";
             btn.disabled = true;
 
-            // Introduce la información al endpoint
             const body = JSON.stringify({
                 action: "register",
                 nombre: negocio,
@@ -354,6 +376,44 @@
                 btn.disabled = false;
             }
         }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhM6EzdUvaWOYczUg_4McUsHr3nyOOXM8",
+            authDomain: "trazafines-login.firebaseapp.com",
+            projectId: "trazafines-login",
+            storageBucket: "trazafines-login.firebasestorage.app",
+            messagingSenderId: "800521304253",
+            appId: "1:800521304253:web:06bbc8900103723bd91fd4",
+            measurementId: "G-M0Z28W84LT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Función conectada al botón de Google
+        window.handleGoogleLogin = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                // Usamos tus funciones existentes para que la plataforma fluya igual
+                window.setUsuarioBtn(`Hola, ${user.displayName}`);
+                window.authViewShow(false);
+                
+            } catch (error) {
+                alert("Hubo un problema al iniciar sesión con Google: " + error.message);
+            }
+        };
+
+        // Enlace para cerrar sesión correctamente de Google
+        window.firebaseSignOut = () => signOut(auth);
     </script>
 </body>
 </html>
