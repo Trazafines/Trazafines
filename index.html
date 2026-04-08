@@ -44,7 +44,7 @@
         .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); transition: 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
-        /* --- PORTAL OPERATIVO (Solo visible al iniciar sesión) --- */
+        /* --- PORTAL OPERATIVO --- */
         #portal-operativo { padding: 60px 10%; text-align: center; background: white; display: none; }
         #form-alta-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid var(--borde); text-align: left;}
         #form-alta-container input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
@@ -221,20 +221,25 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
+        // Aquí integramos tus nuevas claves
         const firebaseConfig = {
             apiKey: "AIzaSyDhM6EzdUvaWOYczUg_4McUsHr3nyOOXM8",
             authDomain: "trazafines-login.firebaseapp.com",
             projectId: "trazafines-login",
             storageBucket: "trazafines-login.firebasestorage.app",
             messagingSenderId: "800521304253",
-            appId: "1:800521304253:web:06bbc8900103723bd91fd4",
-            measurementId: "G-M0Z28W84LT"
+            appId: "1:800521304253:web:e862b2c141528a7ad91fd4", // ACTUALIZADO
+            measurementId: "G-5W3BZS06XE" // ACTUALIZADO
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        
+        // Inicializamos Analytics solo si estamos en un entorno web válido
+        try { const analytics = getAnalytics(app); } catch(e) {}
 
         window.handleGoogleLogin = async () => {
             try {
@@ -263,7 +268,6 @@
     </script>
 
     <script>
-        // Declaramos variables globales CON LA URL DE APPS SCRIPT ACTUALIZADA
         window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbxV-5PbFKnwwZiNpqQpJdLuVYRjrDlkskKGBo8BLryR4-tglgQzbwo1Fxx3_wCzYu1n/exec";
         window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         window.correoUsuarioActual = ""; 
@@ -273,7 +277,6 @@
         let ultimoEnvioClave = null;
         let baseCodigosPostales = []; 
 
-        // --- CARGA TXT SEPOMEX ---
         async function cargarBaseTXT() {
             try {
                 const response = await fetch('Nuevo_Leon.txt'); 
@@ -289,13 +292,11 @@
         }
         window.onload = cargarBaseTXT;
 
-        // --- CONTROL DE MODALES ---
         function abrirModalLogin() { document.getElementById('modal-login').style.display = 'flex'; }
         function cerrarModalLogin() { document.getElementById('modal-login').style.display = 'none'; }
         function abrirModalMapa() { document.getElementById('modal-mapa').style.display = 'flex'; setTimeout(iniciarMapas, 300); }
         function cerrarModalMapa() { document.getElementById('modal-mapa').style.display = 'none'; }
 
-        // --- CONTROL DE SESIÓN ---
         function actualizarInterfazSesion(nombre) {
             document.getElementById("btn-nav-auth").textContent = `Hola, ${nombre}`;
             document.getElementById("btn-nav-auth").onclick = null; 
@@ -327,7 +328,6 @@
             if (window.firebaseSignOut) window.firebaseSignOut();
         }
 
-        // --- EVALUACIÓN INTELIGENTE DEL PERFIL ---
         window.evaluarEstadoPerfil = function(perfil) {
             window.perfilUsuario = perfil;
             const vistaPerfil = document.getElementById("vista-completar-perfil");
@@ -400,7 +400,6 @@
             } catch(e) { alert("Error Técnico al registrar cuenta: " + e.message); console.error(e); }
         }
 
-        // --- MAPAS Y SEPOMEX ---
         function iniciarMapas() {
             if (!mapa1) {
                 mapa1 = L.map('mapa1').setView([25.68, -100.31], 12);
