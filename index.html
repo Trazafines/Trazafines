@@ -263,8 +263,8 @@
     </script>
 
     <script>
-        // Declaramos variables globales CON TU NUEVA URL
-        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbwLFjg2wOMYd1DLOkIlakHUztrTJMr2904mbpEWG0j4Dm1bfAqVkoiFOqT-G51i_mRA/exec";
+        // Declaramos variables globales CON LA URL DE APPS SCRIPT ACTUALIZADA
+        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbxV-5PbFKnwwZiNpqQpJdLuVYRjrDlkskKGBo8BLryR4-tglgQzbwo1Fxx3_wCzYu1n/exec";
         window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         window.correoUsuarioActual = ""; 
         window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
@@ -368,7 +368,7 @@
                 } else {
                     alert("Error al guardar: " + data.message);
                 }
-            } catch(e) { alert("Error de conexión"); }
+            } catch(e) { alert("Error Técnico al guardar perfil: " + e.message); console.error(e); }
         }
 
         async function handleLogin() {
@@ -385,7 +385,7 @@
                     window.evaluarEstadoPerfil(data.profile);
                     cerrarModalLogin(); 
                 } else alert("Credenciales incorrectas.");
-            } catch(e) { alert("Error de conexión al iniciar sesión."); }
+            } catch(e) { alert("Error Técnico al iniciar sesión: " + e.message); console.error(e); }
         }
 
         async function handleRegister() {
@@ -397,7 +397,7 @@
                 const data = await res.json();
                 if (data.status === "éxito") alert("Cuenta creada con éxito. Ya puedes Iniciar Sesión.");
                 else alert(data.message || "Error al registrar.");
-            } catch(e) { alert("Error de conexión al registrar cuenta."); }
+            } catch(e) { alert("Error Técnico al registrar cuenta: " + e.message); console.error(e); }
         }
 
         // --- MAPAS Y SEPOMEX ---
@@ -509,7 +509,7 @@
                     alert("Pedido registrado exitosamente.");
                 } else alert("Error del servidor: " + (data.message || ""));
             } catch (error) { 
-                alert("Problema de conexión al guardar el pedido."); 
+                alert("Error Técnico al enviar pedido: " + error.message); console.error(error);
             } finally {
                 btn.innerText = "✅ Confirmar y Generar Guía";
                 btn.disabled = false;
