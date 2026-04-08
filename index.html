@@ -242,7 +242,6 @@
                 const user = result.user;
                 window.correoUsuarioActual = user.email;
                 
-                // Conectamos Google con tu Apps Script
                 const res = await fetch(window.appsScriptEndpoint, {
                     method: "POST", headers: window.headersSeguros, 
                     body: JSON.stringify({ action: "login_google", email: user.email, nombre: user.displayName })
@@ -264,8 +263,8 @@
     </script>
 
     <script>
-        // Declaramos variables globales
-        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzZXmc8zMIXaiKKoJtud5prdQSdcQ1x5ZlwGoPH4mleSKqjn9M4GmNKRQpBP9PFLH0/exec";
+        // Declaramos variables globales CON TU NUEVA URL
+        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbwLFjg2wOMYd1DLOkIlakHUztrTJMr2904mbpEWG0j4Dm1bfAqVkoiFOqT-G51i_mRA/exec";
         window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         window.correoUsuarioActual = ""; 
         window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
@@ -334,23 +333,19 @@
             const vistaPerfil = document.getElementById("vista-completar-perfil");
             const vistaPedidos = document.getElementById("vista-pedidos");
             
-            // ¿Faltan datos de la empresa?
             if (!perfil.empresa || perfil.empresa === "Usuario Nuevo" || !perfil.telefono) {
                 vistaPerfil.style.display = "block";
                 vistaPedidos.style.display = "none";
                 document.getElementById("negocio-nombre").value = (perfil.empresa === "Usuario Nuevo") ? "" : perfil.empresa;
                 document.getElementById("negocio-celular").value = perfil.telefono || "";
             } else {
-                // ¡Perfil completo!
                 vistaPerfil.style.display = "none";
                 vistaPedidos.style.display = "block";
                 document.getElementById("display-empresa").textContent = perfil.empresa;
                 document.getElementById("display-telefono").textContent = perfil.telefono;
                 
-                // Si ya tiene dirección matriz, la metemos al mapa
                 if(perfil.direccion) {
                     document.getElementById("dir1").value = perfil.direccion;
-                    // Retrasamos el centrado medio segundo para asegurar que el mapa ya se dibujó
                     setTimeout(() => centrarMapaEnColonia(perfil.direccion, mapa1, 1), 800);
                 }
             }
@@ -368,7 +363,6 @@
                 });
                 const data = await res.json();
                 if(data.status === "éxito") {
-                    // Actualizamos la vista sin recargar la página
                     window.evaluarEstadoPerfil({ empresa: emp, telefono: tel, direccion: window.perfilUsuario.direccion });
                     actualizarInterfazSesion(emp);
                 } else {
@@ -480,7 +474,6 @@
             const d2 = document.getElementById('dir2').value.trim();
             const cp2 = document.getElementById('cp2').value.trim();
             
-            // Tomamos los datos directamente de la variable de sesión
             const negocio = window.perfilUsuario.empresa;
             const celular = window.perfilUsuario.telefono;
 
