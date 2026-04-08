@@ -222,7 +222,9 @@
         window.handleGoogleLogin = async () => {
             try {
                 const result = await signInWithPopup(auth, provider);
-                window.actualizarInterfazSesion(result.user.displayName || "Usuario");
+                const user = result.user;
+                window.correoUsuarioActual = user.email; // Guardamos el correo globalmente
+                window.actualizarInterfazSesion(user.displayName || "Usuario");
                 window.cerrarModalLogin();
             } catch (error) {
                 alert("Hubo un problema al iniciar sesión con Google: " + error.message);
@@ -232,12 +234,13 @@
     </script>
 
     <script>
-        const appsScriptEndpoint = "https://script.google.com/macros/s/AKfycby5bSFHkJkW8U6zGQSNxrAN8Ntob3922TnzK0zSC1F04a5oC1ElSBXfbT1STV1Eakfk/exec";
+        const appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzZXmc8zMIXaiKKoJtud5prdQSdcQ1x5ZlwGoPH4mleSKqjn9M4GmNKRQpBP9PFLH0/exec";
         const headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         
         let mapa1, mapa2, marker1, marker2;
         let ultimoEnvioClave = null;
         let baseCodigosPostales = []; 
+        window.correoUsuarioActual = ""; // Variable para ligar los pedidos con el usuario
 
         // --- CARGA TXT SEPOMEX ---
         async function cargarBaseTXT() {
@@ -264,14 +267,13 @@
         // --- CONTROL DE SESIÓN ---
         function actualizarInterfazSesion(nombre) {
             document.getElementById("btn-nav-auth").textContent = `Hola, ${nombre}`;
-            document.getElementById("btn-nav-auth").onclick = null; // Quita la función de abrir login
+            document.getElementById("btn-nav-auth").onclick = null; 
             document.getElementById("btn-nav-auth").style.background = "transparent";
             document.getElementById("btn-nav-auth").style.color = "var(--primario)";
             
             document.getElementById("btn-logout").style.display = "block";
             document.getElementById("portal-operativo").style.display = "block";
             
-            // Ocultar la sección del Hero para llevarlo directo al formulario
             document.querySelector(".hero").style.display = "none";
             document.getElementById("valores").style.display = "none";
             document.getElementById("servicios").style.display = "none";
@@ -286,10 +288,11 @@
             document.getElementById("btn-logout").style.display = "none";
             document.getElementById("portal-operativo").style.display = "none";
             
-            // Restaurar Landing Page
             document.querySelector(".hero").style.display = "flex";
             document.getElementById("valores").style.display = "block";
             document.getElementById("servicios").style.display = "block";
+
+            window.correoUsuarioActual = ""; // Borrar correo al salir
 
             if (window.firebaseSignOut) window.firebaseSignOut();
         }
@@ -302,10 +305,24 @@
                 const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "login", email, contraseña: pass }) });
                 const data = await res.json();
                 if (data.status === "éxito") { 
-                    actualizarInterfazSesion(data.profile.nombre); 
+                    window.correoUsuarioActual = email;
+                    const nombreEmpresa = (data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") ? data.profile.empresa : "Cliente";
+                    actualizarInterfazSesion(nombreEmpresa); 
                     cerrarModalLogin(); 
+
+                    // Autocompletar la información guardada del cliente
+                    if(data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") {
+                        document.getElementById("negocio-nombre").value = data.profile.empresa;
+                    }
+                    if(data.profile.telefono) {
+                        document.getElementById("negocio-celular").value = data.profile.telefono;
+                    }
+                    if(data.profile.direccion) {
+                        document.getElementById("dir1").value = data.profile.direccion;
+                        setTimeout(() => centrarMapaEnColonia(data.profile.direccion, mapa1, 1), 800);
+                    }
                 } else alert("Credenciales incorrectas.");
-            } catch(e) { alert("Error de conexión."); }
+            } catch(e) { alert("Error de conexión al iniciar sesión."); }
         }
 
         async function handleRegister() {
@@ -313,11 +330,11 @@
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce email y contraseña.");
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "register", nombre:"", apellidos:"", empresa:"", telefono:"", email, contraseña: pass, origen:"", destino:"" }) });
+                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "register", empresa: "Usuario Nuevo", telefono: "", email, contraseña: pass }) });
                 const data = await res.json();
                 if (data.status === "éxito") alert("Cuenta creada con éxito. Ya puedes Iniciar Sesión.");
-                else alert("Error al registrar.");
-            } catch(e) { alert("Error de conexión."); }
+                else alert(data.message || "Error al registrar.");
+            } catch(e) { alert("Error de conexión al registrar cuenta."); }
         }
 
         // --- MAPAS Y SEPOMEX ---
@@ -408,8 +425,8 @@
 
             if (!d1 || !d2) return alert("Llena los campos de recolección y entrega.");
 
-            const dir1Comp = `${d1} (C.P. ${cp1})`;
-            const dir2Comp = `${d2} (C.P. ${cp2})`;
+            const dir1Comp = cp1 ? `${d1} (C.P. ${cp1})` : d1;
+            const dir2Comp = cp2 ? `${d2} (C.P. ${cp2})` : d2;
 
             const key = `${negocio}|${celular}|${dir1Comp}|${dir2Comp}`;
             if (ultimoEnvioClave === key) return alert("Solicitud ya enviada.");
@@ -419,14 +436,27 @@
             btn.innerText = "Enviando... ⏳";
             btn.disabled = true;
 
+            const body = JSON.stringify({
+                action: "pedido", 
+                email: window.correoUsuarioActual, // Enviamos el correo para vincularlo a su cuenta
+                empresa: negocio, 
+                telefono: celular, 
+                origen: dir1Comp, 
+                destino: dir2Comp 
+            });
+
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "register", nombre: negocio, apellidos: "", empresa: negocio, telefono: celular, email: celular, contraseña: "", origen: dir1Comp, destino: dir2Comp }) });
+                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body });
                 const data = await res.json();
+                
                 if (data.status === "éxito") {
                     window.open(`https://wa.me/5218112209919?text=NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${dir1Comp}%0A%0AEntrega:%0A${dir2Comp}`, "_blank");
                     cerrarModalMapa();
-                } else alert("Error: " + (data.message || ""));
-            } catch (error) { alert("Problema de conexión."); } finally {
+                    alert("Pedido registrado exitosamente.");
+                } else alert("Error del servidor: " + (data.message || ""));
+            } catch (error) { 
+                alert("Problema de conexión al guardar el pedido."); 
+            } finally {
                 btn.innerText = "✅ Confirmar y Generar Guía";
                 btn.disabled = false;
             }
