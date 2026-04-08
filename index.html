@@ -50,15 +50,13 @@
         #form-alta-container input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
         #form-alta-container input:focus { border-color: var(--primario); outline: none; }
 
-        /* --- MODALES GENERALES (Login y Mapas) --- */
+        /* --- MODALES GENERALES --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background: #f8fafc; padding: 35px; border-radius: 24px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; color: var(--oscuro); box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative;}
-        
-        /* Botón de cerrar (X) para los modales */
         .btn-cerrar-x { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; background: none; border: none; cursor: pointer; color: #94a3b8; transition: 0.3s; }
         .btn-cerrar-x:hover { color: var(--oscuro); }
 
-        /* --- ESTILOS ESPECÍFICOS: MODAL DE LOGIN --- */
+        /* --- LOGIN --- */
         .login-content { max-width: 450px; text-align: center; }
         .login-content input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; }
         .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; font-size: 1rem; }
@@ -70,7 +68,7 @@
         .divisor::before, .divisor::after { content: ''; flex: 1; border-bottom: 1px solid var(--borde); }
         .divisor span { padding: 0 10px; }
 
-        /* --- ESTILOS ESPECÍFICOS: MODAL DE MAPAS --- */
+        /* --- MAPAS --- */
         .modal-header { text-align: center; margin-bottom: 25px; }
         .modal-header h3 { color: var(--primario); margin: 0; font-size: 1.8rem; }
         .modal-header p { color: #64748b; margin-top: 5px; font-size: 0.95rem; }
@@ -123,6 +121,7 @@
             <div class="card"><h3>Compromiso</h3><p>Tu carga es nuestra prioridad desde el origen hasta el destino.</p></div>
         </div>
     </section>
+    
     <section id="servicios" class="section" style="background: var(--claro);">
         <h2>Servicios Especializados</h2>
         <p>En Trazafines nos especializamos en fletes, auditoría de paquetería y logística integral.</p>
@@ -130,18 +129,36 @@
 
     <section id="portal-operativo">
         <div id="form-alta-container">
-            <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem; text-align: center;">Solicitar Repartidor</h3>
-            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px; text-align: center;">Ingresa tus datos y abre el mapa interactivo para trazar la ruta.</p>
             
-            <label for="negocio-nombre" style="font-weight: bold; color: var(--oscuro);">Nombre de la Empresa / Razón Social</label>
-            <input type="text" id="negocio-nombre" placeholder="Ej. Logística MTY S.A." required>
-            
-            <label for="negocio-celular" style="font-weight: bold; color: var(--oscuro);">WhatsApp de Contacto</label>
-            <input type="tel" id="negocio-celular" placeholder="Ej. 8100000000" required>
-            
-            <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; margin-top: 10px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="validarAntesDeAbrirMapa()">
-                🗺️ Trazar Ruta en el Mapa
-            </button>
+            <div id="vista-completar-perfil" style="display: none;">
+                <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem; text-align: center;">Completar Registro</h3>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px; text-align: center;">Antes de solicitar un flete, necesitamos los datos de tu empresa.</p>
+                
+                <label for="negocio-nombre" style="font-weight: bold; color: var(--oscuro);">Nombre de la Empresa / Razón Social</label>
+                <input type="text" id="negocio-nombre" placeholder="Ej. Logística MTY S.A." required>
+                
+                <label for="negocio-celular" style="font-weight: bold; color: var(--oscuro);">WhatsApp de Contacto</label>
+                <input type="tel" id="negocio-celular" placeholder="Ej. 8100000000" required>
+                
+                <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 15px; margin-top: 10px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="guardarPerfil()">
+                    💾 Guardar Datos y Continuar
+                </button>
+            </div>
+
+            <div id="vista-pedidos" style="display: none; text-align: center;">
+                <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem;">Bienvenido a tu Panel</h3>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px;">Tu cuenta está lista. ¿Qué enviaremos hoy?</p>
+                
+                <div style="background: var(--claro); padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: left;">
+                    <p style="margin: 0 0 10px 0;"><strong>🏢 Empresa:</strong> <span id="display-empresa">...</span></p>
+                    <p style="margin: 0;"><strong>📱 WhatsApp:</strong> <span id="display-telefono">...</span></p>
+                </div>
+
+                <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="abrirModalMapa()">
+                    🗺️ Solicitar Nuevo Repartidor
+                </button>
+            </div>
+
         </div>
     </section>
 
@@ -223,9 +240,22 @@
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-                window.correoUsuarioActual = user.email; // Guardamos el correo globalmente
-                window.actualizarInterfazSesion(user.displayName || "Usuario");
-                window.cerrarModalLogin();
+                window.correoUsuarioActual = user.email;
+                
+                // Conectamos Google con tu Apps Script
+                const res = await fetch(window.appsScriptEndpoint, {
+                    method: "POST", headers: window.headersSeguros, 
+                    body: JSON.stringify({ action: "login_google", email: user.email, nombre: user.displayName })
+                });
+                const data = await res.json();
+                
+                if (data.status === "éxito") {
+                    window.actualizarInterfazSesion(data.profile.empresa !== "Usuario Nuevo" ? data.profile.empresa : user.displayName);
+                    window.evaluarEstadoPerfil(data.profile);
+                    window.cerrarModalLogin();
+                } else {
+                    alert("Error al conectar tu cuenta de Google con la base de datos.");
+                }
             } catch (error) {
                 alert("Hubo un problema al iniciar sesión con Google: " + error.message);
             }
@@ -234,13 +264,15 @@
     </script>
 
     <script>
-        const appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzZXmc8zMIXaiKKoJtud5prdQSdcQ1x5ZlwGoPH4mleSKqjn9M4GmNKRQpBP9PFLH0/exec";
-        const headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
+        // Declaramos variables globales
+        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzZXmc8zMIXaiKKoJtud5prdQSdcQ1x5ZlwGoPH4mleSKqjn9M4GmNKRQpBP9PFLH0/exec";
+        window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
+        window.correoUsuarioActual = ""; 
+        window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
         
         let mapa1, mapa2, marker1, marker2;
         let ultimoEnvioClave = null;
         let baseCodigosPostales = []; 
-        window.correoUsuarioActual = ""; // Variable para ligar los pedidos con el usuario
 
         // --- CARGA TXT SEPOMEX ---
         async function cargarBaseTXT() {
@@ -292,9 +324,57 @@
             document.getElementById("valores").style.display = "block";
             document.getElementById("servicios").style.display = "block";
 
-            window.correoUsuarioActual = ""; // Borrar correo al salir
-
+            window.correoUsuarioActual = ""; 
             if (window.firebaseSignOut) window.firebaseSignOut();
+        }
+
+        // --- EVALUACIÓN INTELIGENTE DEL PERFIL ---
+        window.evaluarEstadoPerfil = function(perfil) {
+            window.perfilUsuario = perfil;
+            const vistaPerfil = document.getElementById("vista-completar-perfil");
+            const vistaPedidos = document.getElementById("vista-pedidos");
+            
+            // ¿Faltan datos de la empresa?
+            if (!perfil.empresa || perfil.empresa === "Usuario Nuevo" || !perfil.telefono) {
+                vistaPerfil.style.display = "block";
+                vistaPedidos.style.display = "none";
+                document.getElementById("negocio-nombre").value = (perfil.empresa === "Usuario Nuevo") ? "" : perfil.empresa;
+                document.getElementById("negocio-celular").value = perfil.telefono || "";
+            } else {
+                // ¡Perfil completo!
+                vistaPerfil.style.display = "none";
+                vistaPedidos.style.display = "block";
+                document.getElementById("display-empresa").textContent = perfil.empresa;
+                document.getElementById("display-telefono").textContent = perfil.telefono;
+                
+                // Si ya tiene dirección matriz, la metemos al mapa
+                if(perfil.direccion) {
+                    document.getElementById("dir1").value = perfil.direccion;
+                    // Retrasamos el centrado medio segundo para asegurar que el mapa ya se dibujó
+                    setTimeout(() => centrarMapaEnColonia(perfil.direccion, mapa1, 1), 800);
+                }
+            }
+        };
+
+        async function guardarPerfil() {
+            const emp = document.getElementById("negocio-nombre").value.trim();
+            const tel = document.getElementById("negocio-celular").value.trim();
+            if(!emp || !tel) return alert("Por favor, llena el nombre de tu empresa y WhatsApp.");
+            
+            try {
+                const res = await fetch(window.appsScriptEndpoint, {
+                    method: "POST", headers: window.headersSeguros, 
+                    body: JSON.stringify({ action: "actualizar_perfil", email: window.correoUsuarioActual, empresa: emp, telefono: tel })
+                });
+                const data = await res.json();
+                if(data.status === "éxito") {
+                    // Actualizamos la vista sin recargar la página
+                    window.evaluarEstadoPerfil({ empresa: emp, telefono: tel, direccion: window.perfilUsuario.direccion });
+                    actualizarInterfazSesion(emp);
+                } else {
+                    alert("Error al guardar: " + data.message);
+                }
+            } catch(e) { alert("Error de conexión"); }
         }
 
         async function handleLogin() {
@@ -302,25 +382,14 @@
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce tu email y contraseña.");
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "login", email, contraseña: pass }) });
+                const res = await fetch(window.appsScriptEndpoint, { method: "POST", headers: window.headersSeguros, body: JSON.stringify({ action: "login", email, contraseña: pass }) });
                 const data = await res.json();
                 if (data.status === "éxito") { 
                     window.correoUsuarioActual = email;
                     const nombreEmpresa = (data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") ? data.profile.empresa : "Cliente";
                     actualizarInterfazSesion(nombreEmpresa); 
+                    window.evaluarEstadoPerfil(data.profile);
                     cerrarModalLogin(); 
-
-                    // Autocompletar la información guardada del cliente
-                    if(data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") {
-                        document.getElementById("negocio-nombre").value = data.profile.empresa;
-                    }
-                    if(data.profile.telefono) {
-                        document.getElementById("negocio-celular").value = data.profile.telefono;
-                    }
-                    if(data.profile.direccion) {
-                        document.getElementById("dir1").value = data.profile.direccion;
-                        setTimeout(() => centrarMapaEnColonia(data.profile.direccion, mapa1, 1), 800);
-                    }
                 } else alert("Credenciales incorrectas.");
             } catch(e) { alert("Error de conexión al iniciar sesión."); }
         }
@@ -330,7 +399,7 @@
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce email y contraseña.");
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "register", empresa: "Usuario Nuevo", telefono: "", email, contraseña: pass }) });
+                const res = await fetch(window.appsScriptEndpoint, { method: "POST", headers: window.headersSeguros, body: JSON.stringify({ action: "register", empresa: "Usuario Nuevo", telefono: "", email, contraseña: pass }) });
                 const data = await res.json();
                 if (data.status === "éxito") alert("Cuenta creada con éxito. Ya puedes Iniciar Sesión.");
                 else alert(data.message || "Error al registrar.");
@@ -338,13 +407,6 @@
         }
 
         // --- MAPAS Y SEPOMEX ---
-        function validarAntesDeAbrirMapa() {
-            const negocio = document.getElementById("negocio-nombre").value.trim();
-            const cel = document.getElementById("negocio-celular").value.trim();
-            if (!negocio || !cel) return alert("Por favor, ingresa los datos de tu empresa antes de abrir el mapa.");
-            abrirModalMapa();
-        }
-
         function iniciarMapas() {
             if (!mapa1) {
                 mapa1 = L.map('mapa1').setView([25.68, -100.31], 12);
@@ -381,10 +443,7 @@
             lista.innerHTML = ""; 
             if (cpBuscado.length < 4) return;
             
-            if (baseCodigosPostales.length === 0) {
-                lista.innerHTML = "<div style='color:red; padding:10px;'>⚠️ TXT no cargado. Revisa GitHub.</div>";
-                return;
-            }
+            if (baseCodigosPostales.length === 0) return;
 
             const resultados = baseCodigosPostales.filter(item => item.cp === cpBuscado);
             if (resultados.length === 0) {
@@ -420,8 +479,10 @@
             const cp1 = document.getElementById('cp1').value.trim();
             const d2 = document.getElementById('dir2').value.trim();
             const cp2 = document.getElementById('cp2').value.trim();
-            const negocio = document.getElementById('negocio-nombre').value.trim();
-            const celular = document.getElementById('negocio-celular').value.trim();
+            
+            // Tomamos los datos directamente de la variable de sesión
+            const negocio = window.perfilUsuario.empresa;
+            const celular = window.perfilUsuario.telefono;
 
             if (!d1 || !d2) return alert("Llena los campos de recolección y entrega.");
 
@@ -438,7 +499,7 @@
 
             const body = JSON.stringify({
                 action: "pedido", 
-                email: window.correoUsuarioActual, // Enviamos el correo para vincularlo a su cuenta
+                email: window.correoUsuarioActual,
                 empresa: negocio, 
                 telefono: celular, 
                 origen: dir1Comp, 
@@ -446,7 +507,7 @@
             });
 
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body });
+                const res = await fetch(window.appsScriptEndpoint, { method: "POST", headers: window.headersSeguros, body });
                 const data = await res.json();
                 
                 if (data.status === "éxito") {
