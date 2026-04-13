@@ -44,21 +44,19 @@
         .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); transition: 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
-        /* --- PORTAL OPERATIVO (Solo visible al iniciar sesión) --- */
+        /* --- PORTAL OPERATIVO --- */
         #portal-operativo { padding: 60px 10%; text-align: center; background: white; display: none; }
         #form-alta-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid var(--borde); text-align: left;}
         #form-alta-container input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
         #form-alta-container input:focus { border-color: var(--primario); outline: none; }
 
-        /* --- MODALES GENERALES (Login y Mapas) --- */
+        /* --- MODALES GENERALES --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background: #f8fafc; padding: 35px; border-radius: 24px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; color: var(--oscuro); box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative;}
-        
-        /* Botón de cerrar (X) para los modales */
         .btn-cerrar-x { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; background: none; border: none; cursor: pointer; color: #94a3b8; transition: 0.3s; }
         .btn-cerrar-x:hover { color: var(--oscuro); }
 
-        /* --- ESTILOS ESPECÍFICOS: MODAL DE LOGIN --- */
+        /* --- LOGIN --- */
         .login-content { max-width: 450px; text-align: center; }
         .login-content input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; }
         .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; font-size: 1rem; }
@@ -70,7 +68,7 @@
         .divisor::before, .divisor::after { content: ''; flex: 1; border-bottom: 1px solid var(--borde); }
         .divisor span { padding: 0 10px; }
 
-        /* --- ESTILOS ESPECÍFICOS: MODAL DE MAPAS --- */
+        /* --- MAPAS --- */
         .modal-header { text-align: center; margin-bottom: 25px; }
         .modal-header h3 { color: var(--primario); margin: 0; font-size: 1.8rem; }
         .modal-header p { color: #64748b; margin-top: 5px; font-size: 0.95rem; }
@@ -130,18 +128,33 @@
 
     <section id="portal-operativo">
         <div id="form-alta-container">
-            <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem; text-align: center;">Solicitar Repartidor</h3>
-            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px; text-align: center;">Ingresa tus datos y abre el mapa interactivo para trazar la ruta.</p>
             
-            <label for="negocio-nombre" style="font-weight: bold; color: var(--oscuro);">Nombre de la Empresa / Razón Social</label>
-            <input type="text" id="negocio-nombre" placeholder="Ej. Logística MTY S.A." required>
-            
-            <label for="negocio-celular" style="font-weight: bold; color: var(--oscuro);">WhatsApp de Contacto</label>
-            <input type="tel" id="negocio-celular" placeholder="Ej. 8100000000" required>
-            
-            <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; margin-top: 10px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="validarAntesDeAbrirMapa()">
-                🗺️ Trazar Ruta en el Mapa
-            </button>
+            <div id="vista-completar-perfil" style="display: none;">
+                <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem; text-align: center;">Alta de Empresa</h3>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px; text-align: center;">Completa tus datos y establece tu ubicación para habilitar los pedidos.</p>
+                
+                <label for="negocio-nombre" style="font-weight: bold; color: var(--oscuro);">Nombre de la Empresa / Razón Social</label>
+                <input type="text" id="negocio-nombre" placeholder="Ej. Logística MTY S.A." required>
+                
+                <label for="negocio-celular" style="font-weight: bold; color: var(--oscuro);">WhatsApp de Contacto</label>
+                <input type="tel" id="negocio-celular" placeholder="Ej. 8100000000" required>
+                
+                <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; margin-top: 10px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="validarYAbrirMapaAlta()">
+                    📍 Establecer Dirección Matriz en el Mapa
+                </button>
+            </div>
+
+            <div id="vista-pedidos" style="display: none; text-align: center;">
+                <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem;">Panel de Solicitudes</h3>
+                <div style="background: var(--claro); padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: left;">
+                    <p style="margin: 0 0 10px 0;"><strong>🏢 Empresa:</strong> <span id="lbl-empresa">...</span></p>
+                    <p style="margin: 0;"><strong>📍 Matriz Guardada:</strong> <span id="lbl-direccion">...</span></p>
+                </div>
+                <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="abrirModalMapa('pedido')">
+                    🗺️ Solicitar Nuevo Repartidor
+                </button>
+            </div>
+
         </div>
     </section>
 
@@ -169,19 +182,19 @@
         <div class="modal-content">
             <button class="btn-cerrar-x" onclick="cerrarModalMapa()">✕</button>
             <div class="modal-header">
-                <h3>Trazabilidad de Ruta</h3>
-                <p>Ingresa la calle y el C.P. para buscar en la base oficial.</p>
+                <h3 id="modal-titulo-mapa">Trazabilidad de Ruta</h3>
+                <p id="modal-desc-mapa">Ingresa la calle y el C.P. para buscar en la base oficial.</p>
             </div>
-            <div class="grid-mapas">
-                <div class="mapa-seccion">
-                    <label>📍 Punto de Recolección</label>
+            <div class="grid-mapas" id="contenedor-mapas">
+                <div class="mapa-seccion" id="seccion-origen">
+                    <label id="label-mapa-1">📍 Punto de Recolección</label>
                     <input id="dir1" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
                     <input id="cp1" class="input-cp" placeholder="Código Postal (Ej. 64000)" maxlength="5" />
                     <button class="btn-search" onclick="buscarManual1()">Ubicar en el mapa</button>
                     <div id="colonias1" class="lista-colonias"></div>
                     <div id="mapa1" class="mapa-box"></div>
                 </div>
-                <div class="mapa-seccion">
+                <div class="mapa-seccion" id="seccion-destino">
                     <label>🏁 Punto de Entrega</label>
                     <input id="dir2" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
                     <input id="cp2" class="input-cp" placeholder="Código Postal (Ej. 64000)" maxlength="5" />
@@ -211,8 +224,8 @@
             projectId: "trazafines-login",
             storageBucket: "trazafines-login.firebasestorage.app",
             messagingSenderId: "800521304253",
-            appId: "1:800521304253:web:06bbc8900103723bd91fd4",
-            measurementId: "G-M0Z28W84LT"
+            appId: "1:800521304253:web:e862b2c141528a7ad91fd4",
+            measurementId: "G-5W3BZS06XE"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -223,9 +236,21 @@
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-                window.correoUsuarioActual = user.email; // Guardamos el correo globalmente
-                window.actualizarInterfazSesion(user.displayName || "Usuario");
-                window.cerrarModalLogin();
+                window.correoUsuarioActual = user.email; 
+                
+                const res = await fetch(window.appsScriptEndpoint, {
+                    method: "POST", headers: window.headersSeguros, 
+                    body: JSON.stringify({ action: "login_google", email: user.email, nombre: user.displayName })
+                });
+                const data = await res.json();
+                
+                if (data.status === "éxito") {
+                    window.actualizarInterfazSesion(data.profile.empresa && data.profile.empresa !== "Usuario Nuevo" ? data.profile.empresa : user.displayName);
+                    window.evaluarEstadoPerfil(data.profile);
+                    window.cerrarModalLogin();
+                } else {
+                    alert("Error al conectar tu cuenta de Google.");
+                }
             } catch (error) {
                 alert("Hubo un problema al iniciar sesión con Google: " + error.message);
             }
@@ -234,15 +259,15 @@
     </script>
 
     <script>
-        const appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzZXmc8zMIXaiKKoJtud5prdQSdcQ1x5ZlwGoPH4mleSKqjn9M4GmNKRQpBP9PFLH0/exec";
-        const headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
+        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbxV-5PbFKnwwZiNpqQpJdLuVYRjrDlkskKGBo8BLryR4-tglgQzbwo1Fxx3_wCzYu1n/exec";
+        window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         
         let mapa1, mapa2, marker1, marker2;
         let ultimoEnvioClave = null;
         let baseCodigosPostales = []; 
-        window.correoUsuarioActual = ""; // Variable para ligar los pedidos con el usuario
+        window.correoUsuarioActual = ""; 
+        window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
 
-        // --- CARGA TXT SEPOMEX ---
         async function cargarBaseTXT() {
             try {
                 const response = await fetch('Nuevo_Leon.txt'); 
@@ -254,17 +279,14 @@
                     const col = lineas[i].split('|');
                     if (col.length > 4) baseCodigosPostales.push({ cp: col[0].trim(), colonia: col[1].trim(), municipio: col[3].trim() });
                 }
-            } catch (error) { console.error("Error TXT: Asegúrate de tener Nuevo_Leon.txt en tu servidor."); }
+            } catch (error) { console.error("Asegúrate de tener Nuevo_Leon.txt en tu servidor."); }
         }
         window.onload = cargarBaseTXT;
 
-        // --- CONTROL DE MODALES ---
         function abrirModalLogin() { document.getElementById('modal-login').style.display = 'flex'; }
         function cerrarModalLogin() { document.getElementById('modal-login').style.display = 'none'; }
-        function abrirModalMapa() { document.getElementById('modal-mapa').style.display = 'flex'; setTimeout(iniciarMapas, 300); }
         function cerrarModalMapa() { document.getElementById('modal-mapa').style.display = 'none'; }
 
-        // --- CONTROL DE SESIÓN ---
         function actualizarInterfazSesion(nombre) {
             document.getElementById("btn-nav-auth").textContent = `Hola, ${nombre}`;
             document.getElementById("btn-nav-auth").onclick = null; 
@@ -292,10 +314,30 @@
             document.getElementById("valores").style.display = "block";
             document.getElementById("servicios").style.display = "block";
 
-            window.correoUsuarioActual = ""; // Borrar correo al salir
-
+            window.correoUsuarioActual = ""; 
             if (window.firebaseSignOut) window.firebaseSignOut();
         }
+
+        // --- EL CEREBRO DE LAS DOS VISTAS ---
+        window.evaluarEstadoPerfil = function(perfil) {
+            window.perfilUsuario = perfil;
+            const vistaPerfil = document.getElementById("vista-completar-perfil");
+            const vistaPedidos = document.getElementById("vista-pedidos");
+            
+            // Si le falta registrar la empresa O la dirección matriz
+            if (!perfil.empresa || perfil.empresa === "Usuario Nuevo" || !perfil.direccion) {
+                vistaPerfil.style.display = "block";
+                vistaPedidos.style.display = "none";
+                document.getElementById("negocio-nombre").value = (perfil.empresa && perfil.empresa !== "Usuario Nuevo") ? perfil.empresa : "";
+                document.getElementById("negocio-celular").value = perfil.telefono || "";
+            } else {
+                // Ya tiene todo completo, pasamos al Panel de Solicitudes
+                vistaPerfil.style.display = "none";
+                vistaPedidos.style.display = "block";
+                document.getElementById("lbl-empresa").textContent = perfil.empresa;
+                document.getElementById("lbl-direccion").textContent = perfil.direccion;
+            }
+        };
 
         async function handleLogin() {
             const email = document.getElementById('login-email').value.trim();
@@ -308,21 +350,10 @@
                     window.correoUsuarioActual = email;
                     const nombreEmpresa = (data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") ? data.profile.empresa : "Cliente";
                     actualizarInterfazSesion(nombreEmpresa); 
+                    window.evaluarEstadoPerfil(data.profile); // Aquí se decide si manda a Alta o Pedido
                     cerrarModalLogin(); 
-
-                    // Autocompletar la información guardada del cliente
-                    if(data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") {
-                        document.getElementById("negocio-nombre").value = data.profile.empresa;
-                    }
-                    if(data.profile.telefono) {
-                        document.getElementById("negocio-celular").value = data.profile.telefono;
-                    }
-                    if(data.profile.direccion) {
-                        document.getElementById("dir1").value = data.profile.direccion;
-                        setTimeout(() => centrarMapaEnColonia(data.profile.direccion, mapa1, 1), 800);
-                    }
                 } else alert("Credenciales incorrectas.");
-            } catch(e) { alert("Error de conexión al iniciar sesión."); }
+            } catch(e) { alert("Error al iniciar sesión."); }
         }
 
         async function handleRegister() {
@@ -334,15 +365,79 @@
                 const data = await res.json();
                 if (data.status === "éxito") alert("Cuenta creada con éxito. Ya puedes Iniciar Sesión.");
                 else alert(data.message || "Error al registrar.");
-            } catch(e) { alert("Error de conexión al registrar cuenta."); }
+            } catch(e) { alert("Error al registrar cuenta."); }
         }
 
-        // --- MAPAS Y SEPOMEX ---
-        function validarAntesDeAbrirMapa() {
+        // --- LÓGICA DEL MAPA INTELIGENTE ---
+        function validarYAbrirMapaAlta() {
             const negocio = document.getElementById("negocio-nombre").value.trim();
             const cel = document.getElementById("negocio-celular").value.trim();
-            if (!negocio || !cel) return alert("Por favor, ingresa los datos de tu empresa antes de abrir el mapa.");
-            abrirModalMapa();
+            if (!negocio || !cel) return alert("Por favor, ingresa los datos de tu empresa antes de ubicar la matriz.");
+            abrirModalMapa('alta');
+        }
+
+        function abrirModalMapa(modo) {
+            document.getElementById('modal-mapa').style.display = 'flex';
+            setTimeout(iniciarMapas, 300);
+
+            const seccionDestino = document.getElementById('seccion-destino');
+            const gridMapas = document.getElementById('contenedor-mapas');
+            const btnConfirmar = document.getElementById('btn-confirmar-envio');
+
+            if (modo === 'alta') {
+                seccionDestino.style.display = 'none';
+                gridMapas.style.gridTemplateColumns = '1fr'; // Centra el mapa
+                document.getElementById('modal-titulo-mapa').innerText = "📍 Establecer Matriz";
+                document.getElementById('modal-desc-mapa').innerText = "Busca la dirección donde siempre recogeremos tu mercancía.";
+                document.getElementById('label-mapa-1').innerText = "Dirección Matriz";
+                
+                btnConfirmar.innerText = "💾 Guardar Empresa y Dirección Matriz";
+                btnConfirmar.onclick = guardarPerfilYMatriz;
+            } else {
+                seccionDestino.style.display = 'flex';
+                gridMapas.style.gridTemplateColumns = window.innerWidth <= 768 ? '1fr' : '1fr 1fr'; // Restaura el diseño doble
+                document.getElementById('modal-titulo-mapa').innerText = "Trazabilidad de Ruta";
+                document.getElementById('modal-desc-mapa').innerText = "Verifica tu recolección y selecciona el punto de entrega.";
+                document.getElementById('label-mapa-1').innerText = "📍 Punto de Recolección (Matriz)";
+                
+                btnConfirmar.innerText = "✅ Confirmar y Generar Guía";
+                btnConfirmar.onclick = validarYEnviar;
+
+                // Cargar la Matriz automáticamente en el mapa 1
+                if(window.perfilUsuario.direccion) {
+                    document.getElementById('dir1').value = window.perfilUsuario.direccion;
+                    setTimeout(() => centrarMapaEnColonia(window.perfilUsuario.direccion, mapa1, 1), 500);
+                }
+            }
+        }
+
+        async function guardarPerfilYMatriz() {
+            const emp = document.getElementById("negocio-nombre").value.trim();
+            const tel = document.getElementById("negocio-celular").value.trim();
+            const dirMatriz = document.getElementById("dir1").value.trim();
+
+            if(!dirMatriz) return alert("Por favor, ubica tu matriz en el mapa.");
+
+            const btn = document.getElementById('btn-confirmar-envio');
+            btn.innerText = "Guardando... ⏳";
+            btn.disabled = true;
+
+            try {
+                // Aquí enviamos Empresa, Teléfono Y la Dirección para guardarlos juntos
+                const res = await fetch(appsScriptEndpoint, {
+                    method: "POST", headers: headersSeguros,
+                    body: JSON.stringify({ action: "actualizar_perfil", email: window.correoUsuarioActual, empresa: emp, telefono: tel, direccion: dirMatriz })
+                });
+                const data = await res.json();
+                
+                if(data.status === "éxito") {
+                    window.evaluarEstadoPerfil({ empresa: emp, telefono: tel, direccion: dirMatriz });
+                    actualizarInterfazSesion(emp);
+                    cerrarModalMapa();
+                    alert("¡Perfil completado exitosamente! Ya puedes generar guías.");
+                } else alert("Error: " + data.message);
+            } catch(e) { alert("Problema al guardar la matriz."); } 
+            finally { btn.disabled = false; }
         }
 
         function iniciarMapas() {
@@ -381,10 +476,7 @@
             lista.innerHTML = ""; 
             if (cpBuscado.length < 4) return;
             
-            if (baseCodigosPostales.length === 0) {
-                lista.innerHTML = "<div style='color:red; padding:10px;'>⚠️ TXT no cargado. Revisa GitHub.</div>";
-                return;
-            }
+            if (baseCodigosPostales.length === 0) return;
 
             const resultados = baseCodigosPostales.filter(item => item.cp === cpBuscado);
             if (resultados.length === 0) {
@@ -420,8 +512,10 @@
             const cp1 = document.getElementById('cp1').value.trim();
             const d2 = document.getElementById('dir2').value.trim();
             const cp2 = document.getElementById('cp2').value.trim();
-            const negocio = document.getElementById('negocio-nombre').value.trim();
-            const celular = document.getElementById('negocio-celular').value.trim();
+            
+            // Sacamos los datos directamente del perfil ya registrado
+            const negocio = window.perfilUsuario.empresa;
+            const celular = window.perfilUsuario.telefono;
 
             if (!d1 || !d2) return alert("Llena los campos de recolección y entrega.");
 
@@ -438,7 +532,7 @@
 
             const body = JSON.stringify({
                 action: "pedido", 
-                email: window.correoUsuarioActual, // Enviamos el correo para vincularlo a su cuenta
+                email: window.correoUsuarioActual, 
                 empresa: negocio, 
                 telefono: celular, 
                 origen: dir1Comp, 
