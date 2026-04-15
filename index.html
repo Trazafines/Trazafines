@@ -131,7 +131,7 @@
             
             <div id="vista-completar-perfil" style="display: none;">
                 <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem; text-align: center;">Alta de Empresa</h3>
-                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px; text-align: center;">Completa tus datos y establece tu ubicación para habilitar los pedidos.</p>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px; text-align: center;">Completa tus datos y establece tu ubicación Matriz para habilitar los pedidos.</p>
                 
                 <label for="negocio-nombre" style="font-weight: bold; color: var(--oscuro);">Nombre de la Empresa / Razón Social</label>
                 <input type="text" id="negocio-nombre" placeholder="Ej. Logística MTY S.A." required>
@@ -146,10 +146,13 @@
 
             <div id="vista-pedidos" style="display: none; text-align: center;">
                 <h3 style="color: var(--primario); margin-top: 0; font-size: 1.8rem;">Panel de Solicitudes</h3>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 25px;">¿Qué enviaremos hoy?</p>
+
                 <div style="background: var(--claro); padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: left;">
                     <p style="margin: 0 0 10px 0;"><strong>🏢 Empresa:</strong> <span id="lbl-empresa">...</span></p>
                     <p style="margin: 0;"><strong>📍 Matriz Guardada:</strong> <span id="lbl-direccion">...</span></p>
                 </div>
+
                 <button class="btn-auth" style="background: var(--primario); font-size: 1.1rem; padding: 20px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,71,171,0.2);" onclick="abrirModalMapa('pedido')">
                     🗺️ Solicitar Nuevo Repartidor
                 </button>
@@ -236,8 +239,9 @@
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-                window.correoUsuarioActual = user.email; 
+                window.correoUsuarioActual = user.email;
                 
+                // Conectamos Firebase con Google Sheets
                 const res = await fetch(window.appsScriptEndpoint, {
                     method: "POST", headers: window.headersSeguros, 
                     body: JSON.stringify({ action: "login_google", email: user.email, nombre: user.displayName })
@@ -246,10 +250,10 @@
                 
                 if (data.status === "éxito") {
                     window.actualizarInterfazSesion(data.profile.empresa && data.profile.empresa !== "Usuario Nuevo" ? data.profile.empresa : user.displayName);
-                    window.evaluarEstadoPerfil(data.profile);
+                    window.evaluarEstadoPerfil(data.profile); // Llamamos al Cerebro
                     window.cerrarModalLogin();
                 } else {
-                    alert("Error al conectar tu cuenta de Google.");
+                    alert("Error al conectar tu cuenta de Google con la base de datos.");
                 }
             } catch (error) {
                 alert("Hubo un problema al iniciar sesión con Google: " + error.message);
@@ -259,7 +263,8 @@
     </script>
 
     <script>
-        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbxV-5PbFKnwwZiNpqQpJdLuVYRjrDlkskKGBo8BLryR4-tglgQzbwo1Fxx3_wCzYu1n/exec";
+        // Enlace a tu Web App de Google Sheets
+        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzZXmc8zMIXaiKKoJtud5prdQSdcQ1x5ZlwGoPH4mleSKqjn9M4GmNKRQpBP9PFLH0/exec";
         window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         
         let mapa1, mapa2, marker1, marker2;
@@ -268,6 +273,7 @@
         window.correoUsuarioActual = ""; 
         window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
 
+        // Cargar Base de Códigos Postales
         async function cargarBaseTXT() {
             try {
                 const response = await fetch('Nuevo_Leon.txt'); 
@@ -283,6 +289,7 @@
         }
         window.onload = cargarBaseTXT;
 
+        // Modales Básicos
         function abrirModalLogin() { document.getElementById('modal-login').style.display = 'flex'; }
         function cerrarModalLogin() { document.getElementById('modal-login').style.display = 'none'; }
         function cerrarModalMapa() { document.getElementById('modal-mapa').style.display = 'none'; }
@@ -318,20 +325,20 @@
             if (window.firebaseSignOut) window.firebaseSignOut();
         }
 
-        // --- EL CEREBRO DE LAS DOS VISTAS ---
+        // --- EL CEREBRO LÓGICO ---
         window.evaluarEstadoPerfil = function(perfil) {
             window.perfilUsuario = perfil;
             const vistaPerfil = document.getElementById("vista-completar-perfil");
             const vistaPedidos = document.getElementById("vista-pedidos");
             
-            // Si le falta registrar la empresa O la dirección matriz
             if (!perfil.empresa || perfil.empresa === "Usuario Nuevo" || !perfil.direccion) {
+                // Modo Alta
                 vistaPerfil.style.display = "block";
                 vistaPedidos.style.display = "none";
                 document.getElementById("negocio-nombre").value = (perfil.empresa && perfil.empresa !== "Usuario Nuevo") ? perfil.empresa : "";
                 document.getElementById("negocio-celular").value = perfil.telefono || "";
             } else {
-                // Ya tiene todo completo, pasamos al Panel de Solicitudes
+                // Modo Panel
                 vistaPerfil.style.display = "none";
                 vistaPedidos.style.display = "block";
                 document.getElementById("lbl-empresa").textContent = perfil.empresa;
@@ -344,13 +351,13 @@
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce tu email y contraseña.");
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "login", email, contraseña: pass }) });
+                const res = await fetch(window.appsScriptEndpoint, { method: "POST", headers: window.headersSeguros, body: JSON.stringify({ action: "login", email, contraseña: pass }) });
                 const data = await res.json();
                 if (data.status === "éxito") { 
                     window.correoUsuarioActual = email;
                     const nombreEmpresa = (data.profile.empresa && data.profile.empresa !== "Usuario Nuevo") ? data.profile.empresa : "Cliente";
                     actualizarInterfazSesion(nombreEmpresa); 
-                    window.evaluarEstadoPerfil(data.profile); // Aquí se decide si manda a Alta o Pedido
+                    window.evaluarEstadoPerfil(data.profile);
                     cerrarModalLogin(); 
                 } else alert("Credenciales incorrectas.");
             } catch(e) { alert("Error al iniciar sesión."); }
@@ -361,22 +368,22 @@
             const pass = document.getElementById('login-password').value.trim();
             if (!email || !pass) return alert("Introduce email y contraseña.");
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body: JSON.stringify({ action: "register", empresa: "Usuario Nuevo", telefono: "", email, contraseña: pass }) });
+                const res = await fetch(window.appsScriptEndpoint, { method: "POST", headers: window.headersSeguros, body: JSON.stringify({ action: "register", empresa: "Usuario Nuevo", telefono: "", email, contraseña: pass }) });
                 const data = await res.json();
                 if (data.status === "éxito") alert("Cuenta creada con éxito. Ya puedes Iniciar Sesión.");
                 else alert(data.message || "Error al registrar.");
             } catch(e) { alert("Error al registrar cuenta."); }
         }
 
-        // --- LÓGICA DEL MAPA INTELIGENTE ---
-        function validarYAbrirMapaAlta() {
+        // --- MAPA INTELIGENTE ---
+        window.validarYAbrirMapaAlta = function() {
             const negocio = document.getElementById("negocio-nombre").value.trim();
             const cel = document.getElementById("negocio-celular").value.trim();
             if (!negocio || !cel) return alert("Por favor, ingresa los datos de tu empresa antes de ubicar la matriz.");
             abrirModalMapa('alta');
         }
 
-        function abrirModalMapa(modo) {
+        window.abrirModalMapa = function(modo) {
             document.getElementById('modal-mapa').style.display = 'flex';
             setTimeout(iniciarMapas, 300);
 
@@ -385,17 +392,17 @@
             const btnConfirmar = document.getElementById('btn-confirmar-envio');
 
             if (modo === 'alta') {
-                seccionDestino.style.display = 'none';
-                gridMapas.style.gridTemplateColumns = '1fr'; // Centra el mapa
+                seccionDestino.style.display = 'none'; // Oculta mapa derecho
+                gridMapas.style.gridTemplateColumns = '1fr'; 
                 document.getElementById('modal-titulo-mapa').innerText = "📍 Establecer Matriz";
-                document.getElementById('modal-desc-mapa').innerText = "Busca la dirección donde siempre recogeremos tu mercancía.";
+                document.getElementById('modal-desc-mapa').innerText = "Busca la dirección de origen para tus futuros envíos.";
                 document.getElementById('label-mapa-1').innerText = "Dirección Matriz";
                 
                 btnConfirmar.innerText = "💾 Guardar Empresa y Dirección Matriz";
                 btnConfirmar.onclick = guardarPerfilYMatriz;
             } else {
-                seccionDestino.style.display = 'flex';
-                gridMapas.style.gridTemplateColumns = window.innerWidth <= 768 ? '1fr' : '1fr 1fr'; // Restaura el diseño doble
+                seccionDestino.style.display = 'flex'; // Muestra ambos mapas
+                gridMapas.style.gridTemplateColumns = window.innerWidth <= 768 ? '1fr' : '1fr 1fr'; 
                 document.getElementById('modal-titulo-mapa').innerText = "Trazabilidad de Ruta";
                 document.getElementById('modal-desc-mapa').innerText = "Verifica tu recolección y selecciona el punto de entrega.";
                 document.getElementById('label-mapa-1').innerText = "📍 Punto de Recolección (Matriz)";
@@ -403,7 +410,7 @@
                 btnConfirmar.innerText = "✅ Confirmar y Generar Guía";
                 btnConfirmar.onclick = validarYEnviar;
 
-                // Cargar la Matriz automáticamente en el mapa 1
+                // Auto-llenar mapa 1 con la matriz guardada
                 if(window.perfilUsuario.direccion) {
                     document.getElementById('dir1').value = window.perfilUsuario.direccion;
                     setTimeout(() => centrarMapaEnColonia(window.perfilUsuario.direccion, mapa1, 1), 500);
@@ -423,9 +430,8 @@
             btn.disabled = true;
 
             try {
-                // Aquí enviamos Empresa, Teléfono Y la Dirección para guardarlos juntos
-                const res = await fetch(appsScriptEndpoint, {
-                    method: "POST", headers: headersSeguros,
+                const res = await fetch(window.appsScriptEndpoint, {
+                    method: "POST", headers: window.headersSeguros,
                     body: JSON.stringify({ action: "actualizar_perfil", email: window.correoUsuarioActual, empresa: emp, telefono: tel, direccion: dirMatriz })
                 });
                 const data = await res.json();
@@ -440,6 +446,7 @@
             finally { btn.disabled = false; }
         }
 
+        // Inicialización y Funciones Leaflet / Nominatim
         function iniciarMapas() {
             if (!mapa1) {
                 mapa1 = L.map('mapa1').setView([25.68, -100.31], 12);
@@ -476,7 +483,10 @@
             lista.innerHTML = ""; 
             if (cpBuscado.length < 4) return;
             
-            if (baseCodigosPostales.length === 0) return;
+            if (baseCodigosPostales.length === 0) {
+                lista.innerHTML = "<div style='color:red; padding:10px;'>⚠️ TXT no cargado.</div>";
+                return;
+            }
 
             const resultados = baseCodigosPostales.filter(item => item.cp === cpBuscado);
             if (resultados.length === 0) {
@@ -504,8 +514,8 @@
             });
         }
 
-        function buscarManual1() { centrarMapaEnColonia(document.getElementById("dir1").value, mapa1, 1); }
-        function buscarManual2() { centrarMapaEnColonia(document.getElementById("dir2").value, mapa2, 2); }
+        window.buscarManual1 = function() { centrarMapaEnColonia(document.getElementById("dir1").value, mapa1, 1); }
+        window.buscarManual2 = function() { centrarMapaEnColonia(document.getElementById("dir2").value, mapa2, 2); }
 
         async function validarYEnviar() {
             const d1 = document.getElementById('dir1').value.trim();
@@ -513,7 +523,6 @@
             const d2 = document.getElementById('dir2').value.trim();
             const cp2 = document.getElementById('cp2').value.trim();
             
-            // Sacamos los datos directamente del perfil ya registrado
             const negocio = window.perfilUsuario.empresa;
             const celular = window.perfilUsuario.telefono;
 
@@ -540,7 +549,7 @@
             });
 
             try {
-                const res = await fetch(appsScriptEndpoint, { method: "POST", headers: headersSeguros, body });
+                const res = await fetch(window.appsScriptEndpoint, { method: "POST", headers: window.headersSeguros, body });
                 const data = await res.json();
                 
                 if (data.status === "éxito") {
