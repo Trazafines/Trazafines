@@ -21,7 +21,6 @@
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: white; color: var(--oscuro); scroll-behavior: smooth; overflow-x: hidden; }
         
-        /* --- NAVEGACIÓN --- */
         nav { background: white; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; }
         .logo-nav { height: 40px; width: auto; }
         .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
@@ -31,32 +30,27 @@
         .btn-nav-alta:hover { background: var(--secundario); }
         .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; display: none; font-weight: bold; }
         
-        /* --- HERO --- */
         .hero { background: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url('el-cerro-de-la-silla.jpg'); height: 90vh; min-height: 550px; background-size: cover; background-position: center; color: var(--oscuro); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
         .logo-hero { width: 85%; max-width: 380px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); }
         .hero p { font-size: 1.3rem; margin-bottom: 35px; max-width: 600px; font-weight: 300; }
         .btn-whatsapp-central { background: var(--whatsapp); color: white; text-decoration: none; padding: 16px 30px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
         .btn-whatsapp-central:hover { transform: scale(1.05); box-shadow: 0 12px 20px rgba(0,0,0,0.15); }
         
-        /* --- SECCIONES PÚBLICAS --- */
         .section { padding: 80px 10%; text-align: center; }
         .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
         .card { padding: 40px; border-radius: 12px; background: var(--claro); border-top: 6px solid var(--primario); transition: 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
-        /* --- PORTAL OPERATIVO --- */
         #portal-operativo { padding: 60px 10%; text-align: center; background: white; display: none; }
         #form-alta-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; color: var(--oscuro); box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid var(--borde); text-align: left;}
         #form-alta-container input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
         #form-alta-container input:focus { border-color: var(--primario); outline: none; }
 
-        /* --- MODALES GENERALES --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background: #f8fafc; padding: 35px; border-radius: 24px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; color: var(--oscuro); box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative;}
         .btn-cerrar-x { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; background: none; border: none; cursor: pointer; color: #94a3b8; transition: 0.3s; }
         .btn-cerrar-x:hover { color: var(--oscuro); }
 
-        /* --- LOGIN --- */
         .login-content { max-width: 450px; text-align: center; }
         .login-content input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid var(--borde); border-radius: 8px; font-size: 1rem; }
         .btn-auth { width: 100%; background: var(--primario); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; font-size: 1rem; }
@@ -68,14 +62,17 @@
         .divisor::before, .divisor::after { content: ''; flex: 1; border-bottom: 1px solid var(--borde); }
         .divisor span { padding: 0 10px; }
 
-        /* --- MAPAS --- */
         .modal-header { text-align: center; margin-bottom: 25px; }
         .modal-header h3 { color: var(--primario); margin: 0; font-size: 1.8rem; }
         .modal-header p { color: #64748b; margin-top: 5px; font-size: 0.95rem; }
-        .grid-mapas { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .grid-mapas { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 20px;}
         .mapa-seccion { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--borde); box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column;}
         .mapa-seccion label { font-weight: 700; color: var(--primario); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .input-calle, .input-cp { width: 100%; padding: 12px 15px; border: 1px solid var(--borde); border-radius: 8px; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
+        
+        /* Ajuste visual para los nuevos campos de destinatario */
+        .seccion-info-destinatario { display: flex; gap: 10px; margin-bottom: 8px; }
+        .input-calle, .input-cp, .input-dest { width: 100%; padding: 12px 15px; border: 1px solid var(--borde); border-radius: 8px; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
+        
         .btn-search { width: 100%; background: #64748b; color: white; border: none; border-radius: 8px; padding: 10px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
         .btn-search:hover { background: var(--oscuro); }
         .lista-colonias { margin-bottom: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; background: white; }
@@ -83,11 +80,17 @@
         .lista-colonias div:first-child { border-top: 1px solid var(--borde); border-top-left-radius: 8px; border-top-right-radius: 8px; }
         .lista-colonias div:hover { background: var(--primario); color: white; }
         .mapa-box { height: 280px; border-radius: 12px; border: 1px solid var(--borde); position: relative; z-index: 1; overflow: hidden; margin-top: auto;}
-        .modal-actions { display: flex; gap: 15px; margin-top: 30px; border-top: 1px solid var(--borde); padding-top: 20px; }
+        
+        .caja-paquetes { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--borde); display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;}
+        .caja-paquetes label { font-weight: bold; color: var(--primario); font-size: 1.1rem; }
+        .caja-paquetes input { width: 100px; padding: 10px; border-radius: 8px; border: 1px solid var(--borde); text-align: center; font-size: 1.1rem;}
+        
+        .modal-actions { display: flex; gap: 15px; border-top: 1px solid var(--borde); padding-top: 20px; }
         .btn-confirm { flex: 2; background: var(--whatsapp); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
 
         @media (max-width: 768px) {
             .grid-mapas { grid-template-columns: 1fr; }
+            .seccion-info-destinatario { flex-direction: column; gap: 0; }
             .nav-links { gap: 10px; }
             .nav-links a { font-size: 0.8rem; }
         }
@@ -121,6 +124,7 @@
             <div class="card"><h3>Compromiso</h3><p>Tu carga es nuestra prioridad desde el origen hasta el destino.</p></div>
         </div>
     </section>
+    
     <section id="servicios" class="section" style="background: var(--claro);">
         <h2>Servicios Especializados</h2>
         <p>En Trazafines nos especializamos en fletes, auditoría de paquetería y logística integral.</p>
@@ -188,6 +192,7 @@
                 <h3 id="modal-titulo-mapa">Trazabilidad de Ruta</h3>
                 <p id="modal-desc-mapa">Ingresa la calle y el C.P. para buscar en la base oficial.</p>
             </div>
+            
             <div class="grid-mapas" id="contenedor-mapas">
                 <div class="mapa-seccion" id="seccion-origen">
                     <label id="label-mapa-1">📍 Punto de Recolección</label>
@@ -197,8 +202,15 @@
                     <div id="colonias1" class="lista-colonias"></div>
                     <div id="mapa1" class="mapa-box"></div>
                 </div>
+                
                 <div class="mapa-seccion" id="seccion-destino">
                     <label>🏁 Punto de Entrega</label>
+                    
+                    <div class="seccion-info-destinatario">
+                        <input id="nombre-destinatario" class="input-dest" placeholder="Nombre de quien recibe" />
+                        <input id="tel-destinatario" class="input-dest" placeholder="Teléfono" type="tel" />
+                    </div>
+
                     <input id="dir2" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
                     <input id="cp2" class="input-cp" placeholder="Código Postal (Ej. 64000)" maxlength="5" />
                     <button class="btn-search" onclick="buscarManual2()">Ubicar en el mapa</button>
@@ -206,6 +218,12 @@
                     <div id="mapa2" class="mapa-box"></div>
                 </div>
             </div>
+
+            <div class="caja-paquetes" id="seccion-paquetes">
+                <label>📦 Cantidad de Paquetes a enviar:</label>
+                <input type="number" id="num-paquetes" min="1" value="1">
+            </div>
+
             <div class="modal-actions">
                 <button id="btn-confirmar-envio" class="btn-confirm" onclick="validarYEnviar()">✅ Confirmar y Generar Guía</button>
             </div>
@@ -214,7 +232,7 @@
 
     <footer style="text-align: center; padding: 40px; background: #222; color: white;">
         <img src="Isotipo_sinfondo.png" alt="Logo" style="height: 35px; margin-bottom: 15px; filter: brightness(0) invert(1);" />
-        <p style="margin: 0; color: #aaa; font-size: 0.9rem;">&copy; 2026 Trazafines Logística | Santa Catarina, N.L.</p>
+        <p style="margin: 0; color: #aaa; font-size: 0.9rem;">&copy; 2026 Trazafines Logística</p>
     </footer>
 
     <script type="module">
@@ -241,7 +259,6 @@
                 const user = result.user;
                 window.correoUsuarioActual = user.email;
                 
-                // Conectamos Firebase con Google Sheets
                 const res = await fetch(window.appsScriptEndpoint, {
                     method: "POST", headers: window.headersSeguros, 
                     body: JSON.stringify({ action: "login_google", email: user.email, nombre: user.displayName })
@@ -250,7 +267,7 @@
                 
                 if (data.status === "éxito") {
                     window.actualizarInterfazSesion(data.profile.empresa && data.profile.empresa !== "Usuario Nuevo" ? data.profile.empresa : user.displayName);
-                    window.evaluarEstadoPerfil(data.profile); // Llamamos al Cerebro
+                    window.evaluarEstadoPerfil(data.profile); 
                     window.cerrarModalLogin();
                 } else {
                     alert("Error al conectar tu cuenta de Google con la base de datos.");
@@ -263,8 +280,8 @@
     </script>
 
     <script>
-        // Enlace a tu Web App de Google Sheets
-        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzb6c9JyzcvrtwSvR5G4k2gY2vyZKhgVveVdQr_EblfhPsshKKTcsoXNrBoUJ3tmkne/exec";
+        // Recuerda que si implementas un NUEVO App Script, la URL cambia. Si actualizas sobre el mismo, esta URL sirve.
+        window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzXY_z4Adx2eUY0XbRTmNJUYF4FIJQmMqug8HGMO7ZoLHMxdbDiOjjTWXI8LDUnbM8/exec";
         window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         
         let mapa1, mapa2, marker1, marker2;
@@ -273,7 +290,6 @@
         window.correoUsuarioActual = ""; 
         window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
 
-        // Cargar Base de Códigos Postales
         async function cargarBaseTXT() {
             try {
                 const response = await fetch('Nuevo_Leon.txt'); 
@@ -289,7 +305,6 @@
         }
         window.onload = cargarBaseTXT;
 
-        // Modales Básicos
         function abrirModalLogin() { document.getElementById('modal-login').style.display = 'flex'; }
         function cerrarModalLogin() { document.getElementById('modal-login').style.display = 'none'; }
         function cerrarModalMapa() { document.getElementById('modal-mapa').style.display = 'none'; }
@@ -325,20 +340,17 @@
             if (window.firebaseSignOut) window.firebaseSignOut();
         }
 
-        // --- EL CEREBRO LÓGICO ---
         window.evaluarEstadoPerfil = function(perfil) {
             window.perfilUsuario = perfil;
             const vistaPerfil = document.getElementById("vista-completar-perfil");
             const vistaPedidos = document.getElementById("vista-pedidos");
             
             if (!perfil.empresa || perfil.empresa === "Usuario Nuevo" || !perfil.direccion) {
-                // Modo Alta
                 vistaPerfil.style.display = "block";
                 vistaPedidos.style.display = "none";
                 document.getElementById("negocio-nombre").value = (perfil.empresa && perfil.empresa !== "Usuario Nuevo") ? perfil.empresa : "";
                 document.getElementById("negocio-celular").value = perfil.telefono || "";
             } else {
-                // Modo Panel
                 vistaPerfil.style.display = "none";
                 vistaPedidos.style.display = "block";
                 document.getElementById("lbl-empresa").textContent = perfil.empresa;
@@ -375,7 +387,6 @@
             } catch(e) { alert("Error al registrar cuenta."); }
         }
 
-        // --- MAPA INTELIGENTE ---
         window.validarYAbrirMapaAlta = function() {
             const negocio = document.getElementById("negocio-nombre").value.trim();
             const cel = document.getElementById("negocio-celular").value.trim();
@@ -388,11 +399,13 @@
             setTimeout(iniciarMapas, 300);
 
             const seccionDestino = document.getElementById('seccion-destino');
+            const seccionPaquetes = document.getElementById('seccion-paquetes');
             const gridMapas = document.getElementById('contenedor-mapas');
             const btnConfirmar = document.getElementById('btn-confirmar-envio');
 
             if (modo === 'alta') {
-                seccionDestino.style.display = 'none'; // Oculta mapa derecho
+                seccionDestino.style.display = 'none'; 
+                seccionPaquetes.style.display = 'none';
                 gridMapas.style.gridTemplateColumns = '1fr'; 
                 document.getElementById('modal-titulo-mapa').innerText = "📍 Establecer Matriz";
                 document.getElementById('modal-desc-mapa').innerText = "Busca la dirección de origen para tus futuros envíos.";
@@ -401,16 +414,23 @@
                 btnConfirmar.innerText = "💾 Guardar Empresa y Dirección Matriz";
                 btnConfirmar.onclick = guardarPerfilYMatriz;
             } else {
-                seccionDestino.style.display = 'flex'; // Muestra ambos mapas
+                seccionDestino.style.display = 'flex'; 
+                seccionPaquetes.style.display = 'flex'; 
                 gridMapas.style.gridTemplateColumns = window.innerWidth <= 768 ? '1fr' : '1fr 1fr'; 
                 document.getElementById('modal-titulo-mapa').innerText = "Trazabilidad de Ruta";
                 document.getElementById('modal-desc-mapa').innerText = "Verifica tu recolección y selecciona el punto de entrega.";
                 document.getElementById('label-mapa-1').innerText = "📍 Punto de Recolección (Matriz)";
                 
+                // Reiniciar campos al abrir el modal para nuevo pedido
+                document.getElementById('num-paquetes').value = "1";
+                document.getElementById('nombre-destinatario').value = "";
+                document.getElementById('tel-destinatario').value = "";
+                document.getElementById('dir2').value = "";
+                document.getElementById('cp2').value = "";
+                
                 btnConfirmar.innerText = "✅ Confirmar y Generar Guía";
                 btnConfirmar.onclick = validarYEnviar;
 
-                // Auto-llenar mapa 1 con la matriz guardada
                 if(window.perfilUsuario.direccion) {
                     document.getElementById('dir1').value = window.perfilUsuario.direccion;
                     setTimeout(() => centrarMapaEnColonia(window.perfilUsuario.direccion, mapa1, 1), 500);
@@ -446,7 +466,6 @@
             finally { btn.disabled = false; }
         }
 
-        // Inicialización y Funciones Leaflet / Nominatim
         function iniciarMapas() {
             if (!mapa1) {
                 mapa1 = L.map('mapa1').setView([25.68, -100.31], 12);
@@ -523,15 +542,22 @@
             const d2 = document.getElementById('dir2').value.trim();
             const cp2 = document.getElementById('cp2').value.trim();
             
+            // Atrapar nuevos campos de destinatario
+            const nombreDestinatario = document.getElementById('nombre-destinatario').value.trim();
+            const telDestinatario = document.getElementById('tel-destinatario').value.trim();
+            const paquetes = document.getElementById('num-paquetes').value || "1";
+
             const negocio = window.perfilUsuario.empresa;
             const celular = window.perfilUsuario.telefono;
 
-            if (!d1 || !d2) return alert("Llena los campos de recolección y entrega.");
+            if (!d1 || !d2 || !nombreDestinatario || !telDestinatario) {
+                return alert("Por favor, llena todos los campos de recolección y entrega, incluyendo los datos de quien recibe.");
+            }
 
             const dir1Comp = cp1 ? `${d1} (C.P. ${cp1})` : d1;
             const dir2Comp = cp2 ? `${d2} (C.P. ${cp2})` : d2;
 
-            const key = `${negocio}|${celular}|${dir1Comp}|${dir2Comp}`;
+            const key = `${negocio}|${celular}|${dir1Comp}|${dir2Comp}|${nombreDestinatario}|${paquetes}`;
             if (ultimoEnvioClave === key) return alert("Solicitud ya enviada.");
             ultimoEnvioClave = key;
 
@@ -545,7 +571,10 @@
                 empresa: negocio, 
                 telefono: celular, 
                 origen: dir1Comp, 
-                destino: dir2Comp 
+                destino: dir2Comp,
+                nombreDestinatario: nombreDestinatario, // Nuevo campo
+                telefonoDestinatario: telDestinatario,  // Nuevo campo
+                paquetes: paquetes
             });
 
             try {
@@ -553,7 +582,10 @@
                 const data = await res.json();
                 
                 if (data.status === "éxito") {
-                    window.open(`https://wa.me/5218112209919?text=NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${dir1Comp}%0A%0AEntrega:%0A${dir2Comp}`, "_blank");
+                    // Armar mensaje completo para WhatsApp
+                    const msg = `NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${dir1Comp}%0A%0AEntrega:%0A${dir2Comp}%0ARecibe: ${nombreDestinatario}%0ATeléfono: ${telDestinatario}%0A%0APaquetes totales: ${paquetes}`;
+                    
+                    window.open(`https://wa.me/5218112209919?text=${msg}`, "_blank");
                     cerrarModalMapa();
                     alert("Pedido registrado exitosamente.");
                 } else alert("Error del servidor: " + (data.message || ""));
