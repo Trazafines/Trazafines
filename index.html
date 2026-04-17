@@ -69,7 +69,6 @@
         .mapa-seccion { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--borde); box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column;}
         .mapa-seccion label { font-weight: 700; color: var(--primario); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
         
-        /* Ajuste visual para los nuevos campos de destinatario */
         .seccion-info-destinatario { display: flex; gap: 10px; margin-bottom: 8px; }
         .input-calle, .input-cp, .input-dest { width: 100%; padding: 12px 15px; border: 1px solid var(--borde); border-radius: 8px; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
         
@@ -181,7 +180,8 @@
             <input type="email" id="login-email" placeholder="Correo electrónico">
             <input type="password" id="login-password" placeholder="Contraseña">
             <button class="btn-auth" onclick="handleLogin()">Iniciar Sesión</button>
-            <button class="btn-auth" style="background: transparent; color: var(--oscuro); border: 1px solid #ccc; margin-top: 15px;" onclick="handleRegister()">Crear Cuenta Nueva</button>
+            
+            <button class="btn-auth" style="background: transparent; color: var(--oscuro); border: 1px solid #ccc; margin-top: 15px;" onclick="window.open('registro.html', '_blank')">Crear Cuenta Nueva</button>
         </div>
     </div>
 
@@ -280,7 +280,7 @@
     </script>
 
     <script>
-        // Recuerda que si implementas un NUEVO App Script, la URL cambia. Si actualizas sobre el mismo, esta URL sirve.
+        // Tu URL de App Script.
         window.appsScriptEndpoint = "https://script.google.com/macros/s/AKfycbzXY_z4Adx2eUY0XbRTmNJUYF4FIJQmMqug8HGMO7ZoLHMxdbDiOjjTWXI8LDUnbM8/exec";
         window.headersSeguros = { "Content-Type": "text/plain;charset=utf-8" };
         
@@ -310,7 +310,7 @@
         function cerrarModalMapa() { document.getElementById('modal-mapa').style.display = 'none'; }
 
         function actualizarInterfazSesion(nombre) {
-            document.getElementById("btn-nav-auth").textContent = Hola, ${nombre};
+            document.getElementById("btn-nav-auth").textContent = `Hola, ${nombre}`;
             document.getElementById("btn-nav-auth").onclick = null; 
             document.getElementById("btn-nav-auth").style.background = "transparent";
             document.getElementById("btn-nav-auth").style.color = "var(--primario)";
@@ -373,82 +373,6 @@
                     cerrarModalLogin(); 
                 } else alert("Credenciales incorrectas.");
             } catch(e) { alert("Error al iniciar sesión."); }
-        }
-
-        function handleRegister() {
-            const registroHTML = `
-                <!DOCTYPE html>
-                <html lang="es">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Registro - Trazafines</title>
-                    <style>
-                        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-                        .form-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-                        h2 { text-align: center; color: #0047ab; margin-bottom: 20px; }
-                        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; }
-                        button { width: 100%; background: #0047ab; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-top: 10px; }
-                        button:hover { background: #003380; }
-                        .error { color: red; font-size: 0.9rem; text-align: center; }
-                    </style>
-                </head>
-                <body>
-                    <div class="form-container">
-                        <h2>Registro de Usuario</h2>
-                        <form id="registro-form">
-                            <input type="text" id="nombres" placeholder="Nombres" required>
-                            <input type="text" id="apellidos" placeholder="Apellidos" required>
-                            <input type="tel" id="telefono" placeholder="Número de teléfono" required>
-                            <input type="text" id="empresa" placeholder="Nombre de la empresa" required>
-                            <input type="email" id="email" placeholder="Correo electrónico" required>
-                            <input type="password" id="password" placeholder="Contraseña" required>
-                            <button type="submit">Registrar</button>
-                        </form>
-                        <p id="error-msg" class="error"></p>
-                    </div>
-                    <script>
-                        const form = document.getElementById('registro-form');
-                        const errorMsg = document.getElementById('error-msg');
-                        form.addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            const data = {
-                                action: "register",
-                                nombres: document.getElementById('nombres').value.trim(),
-                                apellidos: document.getElementById('apellidos').value.trim(),
-                                telefono: document.getElementById('telefono').value.trim(),
-                                empresa: document.getElementById('empresa').value.trim(),
-                                email: document.getElementById('email').value.trim(),
-                                contraseña: document.getElementById('password').value.trim()
-                            };
-                            if (!data.nombres || !data.apellidos || !data.telefono || !data.empresa || !data.email || !data.contraseña) {
-                                errorMsg.textContent = "Por favor, completa todos los campos.";
-                                return;
-                            }
-                            try {
-                                const res = await fetch("https://script.google.com/macros/s/AKfycbzXY_z4Adx2eUY0XbRTmNJUYF4FIJQmMqug8HGMO7ZoLHMxdbDiOjjTWXI8LDUnbM8/exec", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                                    body: JSON.stringify(data)
-                                });
-                                const result = await res.json();
-                                if (result.status === "éxito") {
-                                    alert("Cuenta creada con éxito. Puedes cerrar esta pestaña e iniciar sesión.");
-                                    window.close();
-                                } else {
-                                    errorMsg.textContent = result.message || "Error al registrar.";
-                                }
-                            } catch (err) {
-                                errorMsg.textContent = "Error de conexión.";
-                            }
-                        });
-                    <\/script>
-                </body>
-                </html>
-            `;
-            const nuevaVentana = window.open('', '_blank');
-            nuevaVentana.document.write(registroHTML);
-            nuevaVentana.document.close();
         }
 
         window.validarYAbrirMapaAlta = function() {
@@ -550,7 +474,7 @@
         }
 
         function reverseGeocode(pos, num) {
-            fetch(https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng})
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`)
             .then(r => r.json()).then(d => {
                 document.getElementById('dir' + num).value = d.display_name || "";
                 if(d.address && d.address.postcode) document.getElementById('cp' + num).value = d.address.postcode;
@@ -579,19 +503,19 @@
 
             resultados.forEach(lugar => {
                 const div = document.createElement("div");
-                div.innerHTML = <b>${lugar.colonia}</b>, ${lugar.municipio};
+                div.innerHTML = `<b>${lugar.colonia}</b>, ${lugar.municipio}`;
                 div.onclick = () => {
                     const dirAct = document.getElementById(idDir).value;
-                    document.getElementById(idDir).value = ${dirAct ? dirAct + ', ' : ''}Col. ${lugar.colonia}, ${lugar.municipio}, N.L.;
+                    document.getElementById(idDir).value = `${dirAct ? dirAct + ', ' : ''}Col. ${lugar.colonia}, ${lugar.municipio}, N.L.`;
                     lista.innerHTML = ""; 
-                    centrarMapaEnColonia(${lugar.colonia}, ${lugar.municipio}, Nuevo León, mapa, num);
+                    centrarMapaEnColonia(`${lugar.colonia}, ${lugar.municipio}, Nuevo León`, mapa, num);
                 };
                 lista.appendChild(div);
             });
         }
 
         function centrarMapaEnColonia(busqueda, mapa, num) {
-            fetch(https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(busqueda)})
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(busqueda)}`)
             .then(r => r.json()).then(data => {
                 if (data.length) { mapa.setView([data[0].lat, data[0].lon], 14); ponerMarker(data[0], num); }
             });
@@ -618,10 +542,10 @@
                 return alert("Por favor, llena todos los campos de recolección y entrega, incluyendo los datos de quien recibe.");
             }
 
-            const dir1Comp = cp1 ? ${d1} (C.P. ${cp1}) : d1;
-            const dir2Comp = cp2 ? ${d2} (C.P. ${cp2}) : d2;
+            const dir1Comp = cp1 ? `${d1} (C.P. ${cp1})` : d1;
+            const dir2Comp = cp2 ? `${d2} (C.P. ${cp2})` : d2;
 
-            const key = ${negocio}|${celular}|${dir1Comp}|${dir2Comp}|${nombreDestinatario}|${paquetes};
+            const key = `${negocio}|${celular}|${dir1Comp}|${dir2Comp}|${nombreDestinatario}|${paquetes}`;
             if (ultimoEnvioClave === key) return alert("Solicitud ya enviada.");
             ultimoEnvioClave = key;
 
@@ -647,9 +571,9 @@
                 
                 if (data.status === "éxito") {
                     // Armar mensaje completo para WhatsApp
-                    const msg = NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${dir1Comp}%0A%0AEntrega:%0A${dir2Comp}%0ARecibe: ${nombreDestinatario}%0ATeléfono: ${telDestinatario}%0A%0APaquetes totales: ${paquetes};
+                    const msg = `NUEVA SOLICITUD - TRAZAFINES%0A%0AEmpresa: ${negocio}%0AWhatsApp: ${celular}%0A%0ARecolección:%0A${dir1Comp}%0A%0AEntrega:%0A${dir2Comp}%0ARecibe: ${nombreDestinatario}%0ATeléfono: ${telDestinatario}%0A%0APaquetes totales: ${paquetes}`;
                     
-                    window.open(https://wa.me/5218112209919?text=${msg}, "_blank");
+                    window.open(`https://wa.me/5218112209919?text=${msg}`, "_blank");
                     cerrarModalMapa();
                     alert("Pedido registrado exitosamente.");
                 } else alert("Error del servidor: " + (data.message || ""));
