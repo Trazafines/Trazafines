@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Trazafines</title>
     <link rel="icon" type="image/png" href="Isotipo_sinfondo.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px;}
         .form-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center;}
@@ -15,13 +18,15 @@
         input:focus { border-color: #0047ab; outline: none; }
         button { width: 100%; background: #0047ab; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-top: 15px; font-weight: bold; transition: 0.3s;}
         button:hover { background: #003380; }
-        .error { color: #dc3545; font-size: 0.9rem; margin-top: 15px; font-weight: bold;}
+        .mensaje { font-size: 0.9rem; margin-top: 15px; font-weight: bold; }
+        .error { color: #dc3545; }
+        .exito { color: #25d366; }
     </style>
 </head>
 <body>
     <div class="form-container">
         <img src="Isotipo_sinfondo.png" alt="Logo Trazafines" class="logo-registro">
-        <h2>Únete a Trazafines</h2>
+        <h2>Únete a la Plataforma</h2>
         <p class="subtitle">Ingresa los datos de tu negocio para comenzar.</p>
         
         <form id="registro-form">
@@ -33,63 +38,59 @@
             <input type="password" id="password" placeholder="Crea una contraseña" required>
             <button type="submit" id="btn-submit">Crear Cuenta</button>
         </form>
-        <p id="error-msg" class="error"></p>
+        <p id="msg-status" class="mensaje"></p>
     </div>
 
     <script>
-        const appsScriptEndpoint = "https://script.google.com/macros/s/AKfycby6PRZZ9M6KeVZnRo2c5JTC7N7hT7GMXr_4QOXfEiHTcZzZXrIUUxxHMWMA35eGyLM/exec";
+        // 1. CONFIGURACIÓN DE SUPABASE (PON TUS NUEVAS LLAVES AQUÍ)
+        const SUPABASE_URL = "https://jqsxdbcalqpsutdaskof.supabase.co/rest/v1/"; 
+        const SUPABASE_KEY = "sb_publishable_VdaMSx1OXbZ8umdmq41jwQ_ItGTRLH2";
         
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         const form = document.getElementById('registro-form');
-        const errorMsg = document.getElementById('error-msg');
+        const msgStatus = document.getElementById('msg-status');
         const btnSubmit = document.getElementById('btn-submit');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Estado de carga
             btnSubmit.innerText = "Registrando... ⏳";
             btnSubmit.disabled = true;
-            errorMsg.style.color = "#0047ab";
-            errorMsg.textContent = "Conectando con la base de datos...";
+            msgStatus.textContent = "";
+            msgStatus.className = "mensaje";
 
-            const data = {
-                action: "register",
+            // Recolección de datos exactos a como se llaman las columnas en tu tabla
+            const datosRegistro = {
                 nombres: document.getElementById('nombres').value.trim(),
                 apellidos: document.getElementById('apellidos').value.trim(),
                 telefono: document.getElementById('telefono').value.trim(),
                 empresa: document.getElementById('empresa').value.trim(),
                 email: document.getElementById('email').value.trim(),
-                contraseña: document.getElementById('password').value.trim()
+                contrasena: document.getElementById('password').value.trim()
             };
 
-            if (!data.nombres || !data.apellidos || !data.telefono || !data.empresa || !data.email || !data.contraseña) {
-                errorMsg.style.color = "#dc3545";
-                errorMsg.textContent = "Por favor, completa todos los campos.";
-                btnSubmit.innerText = "Crear Cuenta";
-                btnSubmit.disabled = false;
-                return;
-            }
+            // Inserción en la base de datos
+            const { error } = await supabase.from('perfiles').insert([datosRegistro]);
 
-            try {
-                const res = await fetch(appsScriptEndpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await res.json();
-                
-                if (result.status === "éxito") {
-                    alert("¡Cuenta creada con éxito! Ya puedes cerrar esta ventana e iniciar sesión en la página principal.");
-                    window.close(); // Intenta cerrar la pestaña automáticamente
-                } else {
-                    errorMsg.style.color = "#dc3545";
-                    errorMsg.textContent = result.message || "Error al registrar. El correo podría ya existir.";
-                }
-            } catch (err) {
-                errorMsg.style.color = "#dc3545";
-                errorMsg.textContent = "Error de conexión. Intenta de nuevo.";
-            } finally {
+            if (error) {
+                // Si el correo ya existe, Supabase mandará un error que aquí atrapamos
+                msgStatus.textContent = "Error: Es posible que este correo ya esté registrado.";
+                msgStatus.classList.add("error");
                 btnSubmit.innerText = "Crear Cuenta";
                 btnSubmit.disabled = false;
+            } else {
+                // Éxito total
+                msgStatus.textContent = "¡Cuenta creada con éxito! Puedes cerrar esta ventana e iniciar sesión.";
+                msgStatus.classList.add("exito");
+                btnSubmit.innerText = "✅ Registrado";
+                form.reset();
+                
+                // Opcional: cierra la pestaña automáticamente después de 3 segundos
+                setTimeout(() => {
+                    window.close();
+                }, 3000);
             }
         });
     </script>
