@@ -1,9 +1,52 @@
-<script>
-        // 1. CONFIGURACIÓN DE SUPABASE (PON TUS NUEVAS LLAVES AQUÍ)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Trazafines</title>
+    <link rel="icon" type="image/png" href="Isotipo_sinfondo.png">
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px;}
+        .form-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center;}
+        .logo-registro { width: 150px; margin-bottom: 20px; }
+        h2 { color: #0047ab; margin-top: 0; margin-bottom: 5px; }
+        p.subtitle { color: #64748b; font-size: 0.95rem; margin-bottom: 25px; }
+        input { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; box-sizing: border-box;}
+        input:focus { border-color: #0047ab; outline: none; }
+        button { width: 100%; background: #0047ab; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-top: 15px; font-weight: bold; transition: 0.3s;}
+        button:hover { background: #003380; }
+        .mensaje { font-size: 0.9rem; margin-top: 15px; font-weight: bold; }
+        .error { color: #dc3545; }
+        .exito { color: #25d366; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <img src="Isotipo_sinfondo.png" alt="Logo Trazafines" class="logo-registro">
+        <h2>Únete a la Plataforma</h2>
+        <p class="subtitle">Ingresa los datos de tu negocio para comenzar.</p>
+        
+        <form id="registro-form">
+            <input type="text" id="nombres" placeholder="Nombres" required>
+            <input type="text" id="apellidos" placeholder="Apellidos" required>
+            <input type="tel" id="telefono" placeholder="WhatsApp (Ej. 8100000000)" required>
+            <input type="text" id="empresa" placeholder="Nombre de la empresa / Negocio" required>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <input type="password" id="password" placeholder="Crea una contraseña" required>
+            <button type="submit" id="btn-submit">Crear Cuenta</button>
+        </form>
+        <p id="msg-status" class="mensaje"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // 1. CONFIGURACIÓN DE SUPABASE
         const SUPABASE_URL = "https://jqsxdbcalqpsutdaskof.supabase.co/rest/v1/"; 
         const SUPABASE_KEY = "sb_publishable_DptS8CT7OS17X5TkrP5m-w_ycWfdB-z";
         
-        // EL ARREGLO: Le cambiamos el nombre para que no choque
+        // Iniciamos la conexión
         const clienteSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const form = document.getElementById('registro-form');
@@ -11,15 +54,15 @@
         const btnSubmit = document.getElementById('btn-submit');
 
         form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Frena que la página se recargue en blanco
             
-            // Estado de carga
+            // Cambiamos el texto del botón
             btnSubmit.innerText = "Registrando... ⏳";
             btnSubmit.disabled = true;
             msgStatus.textContent = "";
             msgStatus.className = "mensaje";
 
-            // Recolección de datos exactos a como se llaman las columnas en tu tabla
+            // Recolectamos los datos
             const datosRegistro = {
                 nombres: document.getElementById('nombres').value.trim(),
                 apellidos: document.getElementById('apellidos').value.trim(),
@@ -29,26 +72,27 @@
                 contrasena: document.getElementById('password').value.trim()
             };
 
-            // Inserción en la base de datos (Usando el nuevo nombre)
+            // Los mandamos a la tabla 'perfiles'
             const { error } = await clienteSupabase.from('perfiles').insert([datosRegistro]);
 
             if (error) {
-                // Si el correo ya existe, Supabase mandará un error que aquí atrapamos
-                msgStatus.textContent = "Error: Es posible que este correo ya esté registrado. (" + error.message + ")";
+                // Si falla (por ejemplo, correo repetido)
+                msgStatus.textContent = "Error: " + error.message;
                 msgStatus.classList.add("error");
                 btnSubmit.innerText = "Crear Cuenta";
                 btnSubmit.disabled = false;
             } else {
-                // Éxito total
-                msgStatus.textContent = "¡Cuenta creada con éxito! Puedes cerrar esta ventana e iniciar sesión.";
+                // Si todo sale bien
+                msgStatus.textContent = "¡Cuenta creada con éxito! Cerrando ventana...";
                 msgStatus.classList.add("exito");
                 btnSubmit.innerText = "✅ Registrado";
                 form.reset();
                 
-                // Cierra la pestaña automáticamente después de 3 segundos
                 setTimeout(() => {
                     window.close();
                 }, 3000);
             }
         });
     </script>
+</body>
+</html>
