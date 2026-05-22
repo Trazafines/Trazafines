@@ -6,8 +6,6 @@
     <title>Trazafines | Logística Integral</title>
     <link rel="icon" type="image/png" href="Isotipo_sinfondo.png">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -73,12 +71,6 @@
         .seccion-info-destinatario { display: flex; gap: 10px; margin-bottom: 8px; }
         .input-calle, .input-cp, .input-dest { width: 100%; padding: 12px 15px; border: 1px solid var(--borde); border-radius: 8px; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
         
-        .btn-search { width: 100%; background: #64748b; color: white; border: none; border-radius: 8px; padding: 10px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
-        .btn-search:hover { background: var(--oscuro); }
-        .lista-colonias { margin-bottom: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; background: white; }
-        .lista-colonias div { padding: 10px 12px; font-size: 0.85rem; cursor: pointer; border: 1px solid var(--borde); border-top: none; }
-        .lista-colonias div:first-child { border-top: 1px solid var(--borde); border-top-left-radius: 8px; border-top-right-radius: 8px; }
-        .lista-colonias div:hover { background: var(--primario); color: white; }
         .mapa-box { height: 280px; border-radius: 12px; border: 1px solid var(--borde); position: relative; z-index: 1; overflow: hidden; margin-top: auto;}
         
         .caja-paquetes { background: white; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--borde); display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;}
@@ -191,16 +183,14 @@
             <button class="btn-cerrar-x" onclick="cerrarModalMapa()">✕</button>
             <div class="modal-header">
                 <h3 id="modal-titulo-mapa">Trazabilidad de Ruta</h3>
-                <p id="modal-desc-mapa">Ingresa la calle y el C.P. para buscar en la base oficial.</p>
+                <p id="modal-desc-mapa">Busca la calle y el C.P. se llenará automáticamente.</p>
             </div>
             
             <div class="grid-mapas" id="contenedor-mapas">
                 <div class="mapa-seccion" id="seccion-origen">
                     <label id="label-mapa-1">📍 Punto de Recolección</label>
-                    <input id="dir1" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
-                    <input id="cp1" class="input-cp" placeholder="Código Postal (Ej. 64000)" maxlength="5" />
-                    <button class="btn-search" onclick="buscarManual1()">Ubicar en el mapa</button>
-                    <div id="colonias1" class="lista-colonias"></div>
+                    <input id="dir1" class="input-calle" placeholder="Escribe la calle o colonia..." />
+                    <input id="cp1" class="input-cp" placeholder="Código Postal (Automático)" readonly />
                     <div id="mapa1" class="mapa-box"></div>
                 </div>
                 
@@ -212,10 +202,8 @@
                         <input id="tel-destinatario" class="input-dest" placeholder="Teléfono" type="tel" />
                     </div>
 
-                    <input id="dir2" class="input-calle" placeholder="Calle y Número Exterior/Interior" />
-                    <input id="cp2" class="input-cp" placeholder="Código Postal (Ej. 64000)" maxlength="5" />
-                    <button class="btn-search" onclick="buscarManual2()">Ubicar en el mapa</button>
-                    <div id="colonias2" class="lista-colonias"></div>
+                    <input id="dir2" class="input-calle" placeholder="Escribe la calle o colonia..." />
+                    <input id="cp2" class="input-cp" placeholder="Código Postal (Automático)" readonly />
                     <div id="mapa2" class="mapa-box"></div>
                 </div>
             </div>
@@ -237,10 +225,9 @@
     </footer>
 
     <script>
+        // CONFIGURACIÓN DE SUPABASE
         const SUPABASE_URL = "https://jqsxdbcalqpsutdaskof.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_DptS8CT7OS17X5TkrP5m-w_ycWfdB-z";
-        
-        // Creamos la conexión de forma global para que todo el sistema la vea
         window.clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     </script>
 
@@ -268,11 +255,9 @@
                 const user = result.user;
                 window.correoUsuarioActual = user.email;
                 
-                // AJUSTE: Buscamos al usuario en Supabase en vez de Google Sheets
                 let { data, error } = await window.clienteSupabase.from('perfiles').select('*').eq('email', user.email).single();
                 
                 if (!data) {
-                    // Si no existe, lo registramos automáticamente en Supabase
                     const { data: newUser } = await window.clienteSupabase.from('perfiles')
                         .insert([{ email: user.email, nombres: user.displayName, empresa: "Usuario Nuevo" }])
                         .select().single();
@@ -290,26 +275,9 @@
     </script>
 
     <script>
-        let mapa1, mapa2, marker1, marker2;
         let ultimoEnvioClave = null;
-        let baseCodigosPostales = []; 
         window.correoUsuarioActual = ""; 
         window.perfilUsuario = { empresa: "", telefono: "", direccion: "" };
-
-        async function cargarBaseTXT() {
-            try {
-                const response = await fetch('Nuevo_Leon.txt'); 
-                if (!response.ok) throw new Error("No TXT");
-                const buffer = await response.arrayBuffer();
-                const texto = new TextDecoder('iso-8859-1').decode(buffer);
-                const lineas = texto.split('\n');
-                for (let i = 2; i < lineas.length; i++) { 
-                    const col = lineas[i].split('|');
-                    if (col.length > 4) baseCodigosPostales.push({ cp: col[0].trim(), colonia: col[1].trim(), municipio: col[3].trim() });
-                }
-            } catch (error) { console.error("Asegúrate de tener Nuevo_Leon.txt en tu servidor."); }
-        }
-        window.onload = cargarBaseTXT;
 
         function abrirModalLogin() { document.getElementById('modal-login').style.display = 'flex'; }
         function cerrarModalLogin() { document.getElementById('modal-login').style.display = 'none'; }
@@ -364,7 +332,6 @@
             }
         };
 
-        // AJUSTE: Login Manual ahora busca en Supabase
         async function handleLogin() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value.trim();
@@ -392,7 +359,16 @@
 
         window.abrirModalMapa = function(modo) {
             document.getElementById('modal-mapa').style.display = 'flex';
-            setTimeout(iniciarMapas, 300);
+            
+            // Forzar renderizado de los mapas de Google si el contenedor estaba oculto
+            if (typeof mapa1 !== "undefined" && typeof mapa2 !== "undefined") {
+                setTimeout(() => {
+                    google.maps.event.trigger(mapa1, 'resize');
+                    google.maps.event.trigger(mapa2, 'resize');
+                    mapa1.setCenter({ lat: 25.6750, lng: -100.4536 });
+                    mapa2.setCenter({ lat: 25.6750, lng: -100.4536 });
+                }, 300);
+            }
 
             const seccionDestino = document.getElementById('seccion-destino');
             const seccionPaquetes = document.getElementById('seccion-paquetes');
@@ -417,7 +393,6 @@
                 document.getElementById('modal-desc-mapa').innerText = "Verifica tu recolección y selecciona el punto de entrega.";
                 document.getElementById('label-mapa-1').innerText = "📍 Punto de Recolección (Matriz)";
                 
-                // Reiniciar campos al abrir el modal para nuevo pedido
                 document.getElementById('num-paquetes').value = "1";
                 document.getElementById('nombre-destinatario').value = "";
                 document.getElementById('tel-destinatario').value = "";
@@ -429,18 +404,16 @@
 
                 if(window.perfilUsuario.direccion) {
                     document.getElementById('dir1').value = window.perfilUsuario.direccion;
-                    setTimeout(() => centrarMapaEnColonia(window.perfilUsuario.direccion, mapa1, 1), 500);
                 }
             }
         }
 
-        // AJUSTE: Guardar matriz ahora usa un 'upsert' en Supabase
         async function guardarPerfilYMatriz() {
             const emp = document.getElementById("negocio-nombre").value.trim();
             const tel = document.getElementById("negocio-celular").value.trim();
             const dirMatriz = document.getElementById("dir1").value.trim();
 
-            if(!dirMatriz) return alert("Por favor, ubica tu matriz en el mapa.");
+            if(!dirMatriz) return alert("Por favor, busca tu matriz en el mapa.");
 
             const btn = document.getElementById('btn-confirmar-envio');
             btn.innerText = "Guardando... ⏳";
@@ -465,77 +438,6 @@
             btn.innerText = "💾 Guardar Empresa y Dirección Matriz";
         }
 
-        function iniciarMapas() {
-            if (!mapa1) {
-                mapa1 = L.map('mapa1').setView([25.68, -100.31], 12);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapa1);
-                mapa1.on('click', e => { ponerMarker(e.latlng, 1); reverseGeocode(e.latlng, 1); });
-            }
-            if (!mapa2) {
-                mapa2 = L.map('mapa2').setView([25.68, -100.31], 12);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapa2);
-                mapa2.on('click', e => { ponerMarker(e.latlng, 2); reverseGeocode(e.latlng, 2); });
-            }
-            mapa1.invalidateSize(); mapa2.invalidateSize();
-        }
-
-        function ponerMarker(pos, num) {
-            if (num === 1) { if (marker1) mapa1.removeLayer(marker1); marker1 = L.marker(pos).addTo(mapa1); } 
-            else { if (marker2) mapa2.removeLayer(marker2); marker2 = L.marker(pos).addTo(mapa2); }
-        }
-
-        function reverseGeocode(pos, num) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`)
-            .then(r => r.json()).then(d => {
-                document.getElementById('dir' + num).value = d.display_name || "";
-                if(d.address && d.address.postcode) document.getElementById('cp' + num).value = d.address.postcode;
-            }).catch(err => console.error(err));
-        }
-
-        document.getElementById('cp1').addEventListener('input', () => procesarCPLOCAL('cp1', 'colonias1', 'dir1', mapa1, 1));
-        document.getElementById('cp2').addEventListener('input', () => procesarCPLOCAL('cp2', 'colonias2', 'dir2', mapa2, 2));
-
-        function procesarCPLOCAL(idCp, listaId, idDir, mapa, num) {
-            const cpBuscado = document.getElementById(idCp).value.trim();
-            const lista = document.getElementById(listaId);
-            lista.innerHTML = ""; 
-            if (cpBuscado.length < 4) return;
-            
-            if (baseCodigosPostales.length === 0) {
-                lista.innerHTML = "<div style='color:red; padding:10px;'>⚠️ TXT no cargado.</div>";
-                return;
-            }
-
-            const resultados = baseCodigosPostales.filter(item => item.cp === cpBuscado);
-            if (resultados.length === 0) {
-                if(cpBuscado.length === 5) { lista.innerHTML = "<div style='color:red; padding:10px;'>C.P. no encontrado</div>"; setTimeout(() => lista.innerHTML = "", 3000); }
-                return;
-            }
-
-            resultados.forEach(lugar => {
-                const div = document.createElement("div");
-                div.innerHTML = `<b>${lugar.colonia}</b>, ${lugar.municipio}`;
-                div.onclick = () => {
-                    const dirAct = document.getElementById(idDir).value;
-                    document.getElementById(idDir).value = `${dirAct ? dirAct + ', ' : ''}Col. ${lugar.colonia}, ${lugar.municipio}, N.L.`;
-                    lista.innerHTML = ""; 
-                    centrarMapaEnColonia(`${lugar.colonia}, ${lugar.municipio}, Nuevo León`, mapa, num);
-                };
-                lista.appendChild(div);
-            });
-        }
-
-        function centrarMapaEnColonia(busqueda, mapa, num) {
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(busqueda)}`)
-            .then(r => r.json()).then(data => {
-                if (data.length) { mapa.setView([data[0].lat, data[0].lon], 14); ponerMarker(data[0], num); }
-            });
-        }
-
-        window.buscarManual1 = function() { centrarMapaEnColonia(document.getElementById("dir1").value, mapa1, 1); }
-        window.buscarManual2 = function() { centrarMapaEnColonia(document.getElementById("dir2").value, mapa2, 2); }
-
-        // AJUSTE: Validar y Enviar ahora inserta en Supabase
         async function validarYEnviar() {
             const d1 = document.getElementById('dir1').value.trim();
             const cp1 = document.getElementById('cp1').value.trim();
@@ -589,6 +491,62 @@
             btn.innerText = "✅ Confirmar y Generar Guía";
             btn.disabled = false;
         }
+
+        // --- LÓGICA DE GOOGLE MAPS ---
+        let mapa1, mapa2, marker1, marker2;
+        let auto1, auto2;
+
+        window.iniciarMapas = function() {
+            // Centrado inicial (Santa Catarina, N.L. como referencia)
+            const centroInicial = { lat: 25.6750, lng: -100.4536 }; 
+            const mapOptions = { center: centroInicial, zoom: 12, streetViewControl: false, mapTypeControl: false };
+
+            mapa1 = new google.maps.Map(document.getElementById("mapa1"), mapOptions);
+            mapa2 = new google.maps.Map(document.getElementById("mapa2"), mapOptions);
+
+            const autoOptions = { 
+                componentRestrictions: { country: "mx" }, 
+                fields: ["address_components", "geometry", "formatted_address", "name"] 
+            };
+            
+            auto1 = new google.maps.places.Autocomplete(document.getElementById("dir1"), autoOptions);
+            auto2 = new google.maps.places.Autocomplete(document.getElementById("dir2"), autoOptions);
+
+            auto1.addListener("place_changed", () => manejarLugarSeleccionado(auto1, mapa1, 1));
+            auto2.addListener("place_changed", () => manejarLugarSeleccionado(auto2, mapa2, 2));
+        };
+
+        function manejarLugarSeleccionado(autocomplete, mapa, num) {
+            const place = autocomplete.getPlace();
+            if (!place.geometry || !place.geometry.location) {
+                return; // Si el usuario presionó enter sin seleccionar nada de la lista
+            }
+
+            // Centrar mapa
+            mapa.setCenter(place.geometry.location);
+            mapa.setZoom(16);
+
+            // Poner Marcador
+            if (num === 1) {
+                if (marker1) marker1.setMap(null);
+                marker1 = new google.maps.Marker({ map: mapa, position: place.geometry.location, animation: google.maps.Animation.DROP });
+            } else {
+                if (marker2) marker2.setMap(null);
+                marker2 = new google.maps.Marker({ map: mapa, position: place.geometry.location, animation: google.maps.Animation.DROP });
+            }
+
+            // Extraer Código Postal
+            let cpEncontrado = "";
+            for (const component of place.address_components) {
+                if (component.types.includes("postal_code")) {
+                    cpEncontrado = component.long_name;
+                    break;
+                }
+            }
+            document.getElementById('cp' + num).value = cpEncontrado;
+        }
     </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_LLAVE_DE_GOOGLE_AQUI&libraries=places&callback=iniciarMapas" async defer></script>
 </body>
 </html>
